@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.feedback_rating.entity;
+package com.feedback_rating.entity.email_notification;
 
 import javax.transaction.Transactional;
 
@@ -10,16 +10,15 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.feedback_rating.entity.order.Order;
 
 /**
  * @author gurushant.j
  *
  */
-
 @Repository
 @Transactional
-public class OrderDao {
-
+public class EmailNotificationDao {
 	@Autowired
 	private SessionFactory _sessionFactory;
 	
@@ -28,8 +27,9 @@ public class OrderDao {
 		return _sessionFactory.openSession();
 	}
 	
-	public Order getOrderDetail(OrderKey key)
+	public EmailNotification getEmailDetail(EmailNotifyKey key)
 	{
-		return (Order) getSession().load(Order.class, key);
+		return (EmailNotification) getSession().load(EmailNotification.class, key);
 	}
+
 }

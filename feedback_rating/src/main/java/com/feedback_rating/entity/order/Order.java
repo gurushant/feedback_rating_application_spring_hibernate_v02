@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.feedback_rating.entity;
+package com.feedback_rating.entity.order;
 
 import java.util.Date;
 
