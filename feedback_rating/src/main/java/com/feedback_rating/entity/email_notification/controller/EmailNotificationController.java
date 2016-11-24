@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.feedback_rating.entity.email_notification.models.EmailNotificationDao;
 import com.feedback_rating.entity.email_notification.models.EmailNotificationObjectModel;
+import com.feedback_rating.entity.email_notification.models.EmailNotifyKey;
 import com.feedback_rating.entity.email_notification.models.ResponseModel;
 import com.feedback_rating.entity.email_notification.utils.CommonUtils;
 import com.google.gson.Gson;
@@ -53,6 +54,10 @@ public class EmailNotificationController {
 			float recipeSumRating=utils.extractRating(emailObj.getRecipeList());
 			float overallRecipeRating=utils.roundUpRating(recipeSumRating/recipeList.size());
 			log.debug("Overall recipe rating is=> "+overallRecipeRating);
+			EmailNotifyKey key=new EmailNotifyKey(emailObj.getOrderId(),emailObj.getRestId());
+			log.debug("Key in email_noficiation before update  is => "+key);
+			emailDao.updateEmailNotification(key, true);
+//			log.debug("Key in email_noficiation after update  is => "+key);
 			respModel=utils.getSucessResponse("Successfully posted feedback");
 		}
 		catch(Exception ex)

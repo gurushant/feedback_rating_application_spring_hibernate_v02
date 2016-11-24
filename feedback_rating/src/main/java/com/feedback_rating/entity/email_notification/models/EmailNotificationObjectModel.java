@@ -16,9 +16,9 @@ import com.google.gson.annotations.SerializedName;
  */
 public class EmailNotificationObjectModel {
 	@SerializedName("order_id")
-	private String orderId;
+	private Integer orderId;
 	@SerializedName("restaruent_id")
-	private String restId;
+	private Integer restId;
 	@SerializedName("economy")
 	private Float economyRate;
 	@SerializedName("ambience")
@@ -29,16 +29,16 @@ public class EmailNotificationObjectModel {
 	private String feedbackTxt;
 	@SerializedName("recipe_rating")
 	private List<Object> recipeList=new ArrayList<Object>();
-	public String getOrderId() {
+	public Integer getOrderId() {
 		return orderId;
 	}
-	public void setOrderId(String orderId) {
+	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
-	public String getRestId() {
+	public Integer getRestId() {
 		return restId;
 	}
-	public void setRestId(String restId) {
+	public void setRestId(Integer restId) {
 		this.restId = restId;
 	}
 	public Float getEconomyRate() {
