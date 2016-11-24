@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.feedback_rating.entity.email_notification;
+package com.feedback_rating.entity.email_notification.models;
 
 import javax.transaction.Transactional;
 
@@ -10,7 +10,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.feedback_rating.entity.order.Order;
 
 /**
  * @author gurushant.j

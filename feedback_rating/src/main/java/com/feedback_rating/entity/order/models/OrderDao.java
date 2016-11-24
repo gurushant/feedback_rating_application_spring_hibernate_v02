@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.feedback_rating.entity.order;
+package com.feedback_rating.entity.order.models;
 
 import javax.transaction.Transactional;
 

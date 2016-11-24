@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.feedback_rating.entity.email_notification;
+package com.feedback_rating.entity.email_notification.models;
 
 import java.util.Date;
 

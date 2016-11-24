@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.feedback_rating.entity.order;
+package com.feedback_rating.entity.order.models;
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -21,6 +21,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name="orders")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Order {
+	
+	@Transient
+	private String status;
+	@Transient
+	private String message;
 	@EmbeddedId
 	private OrderKey key;
 	@Column(name="served_date_time")
@@ -43,6 +48,9 @@ public class Order {
 	private int orderRating;
 	@Column(name="feedback")	
 	private String feedback;
+	
+
+	
 	public Order()
 	{
 		
@@ -50,6 +58,18 @@ public class Order {
 	public Order(OrderKey key)
 	{
 		this.key=key;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
 	}
 	public OrderKey getKey() {
 		return key;
