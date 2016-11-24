@@ -61,4 +61,10 @@ public class OrderKey implements Serializable{
 		return getId().hashCode()+getRestId().hashCode();
 	}
 	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return getId()+","+getRestId();
+	}
+	
 }

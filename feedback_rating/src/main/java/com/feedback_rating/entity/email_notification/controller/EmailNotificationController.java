@@ -5,6 +5,8 @@ package com.feedback_rating.entity.email_notification.controller;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,45 +29,16 @@ import com.google.gson.GsonBuilder;
  */
 @RestController
 @RequestMapping("/review")
+@Transactional
 public class EmailNotificationController {
 
 	private static final Logger log = LoggerFactory.getLogger(EmailNotificationController.class);
 
-	@Autowired
-	EmailNotificationDao emailDao;
+	
 
 	@Autowired
 	CommonUtils utils;
 
-	@RequestMapping(value="/postFeedback",
-			produces="application/json",
-			consumes="application/json",
-			method=RequestMethod.POST	)
-	@ResponseBody
-	public ResponseModel postFeedback(@RequestBody String postPayload)
-	{
-		ResponseModel respModel=new ResponseModel();
-		try
-		{
-			log.debug("Received payload is => "+postPayload);
-			Gson gson=new GsonBuilder().create();
-			EmailNotificationObjectModel emailObj=gson.fromJson(postPayload, EmailNotificationObjectModel.class);
-			List<Object> recipeList=emailObj.getRecipeList();
-			float recipeSumRating=utils.extractRating(emailObj.getRecipeList());
-			float overallRecipeRating=utils.roundUpRating(recipeSumRating/recipeList.size());
-			log.debug("Overall recipe rating is=> "+overallRecipeRating);
-			EmailNotifyKey key=new EmailNotifyKey(emailObj.getOrderId(),emailObj.getRestId());
-			log.debug("Key in email_noficiation before update  is => "+key);
-			emailDao.updateEmailNotification(key, true);
-//			log.debug("Key in email_noficiation after update  is => "+key);
-			respModel=utils.getSucessResponse("Successfully posted feedback");
-		}
-		catch(Exception ex)
-		{
-			log.error("Error occured in postback method.Stacktrace is => "+utils.getStackTrace(ex));
-			respModel=utils.getErrorResponse("Error occured while posting feedback");
-		}
 		
-		return respModel;
-	}
+	
 }

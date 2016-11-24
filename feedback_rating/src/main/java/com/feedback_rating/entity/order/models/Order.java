@@ -10,6 +10,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.transaction.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -43,9 +44,9 @@ public class Order {
 	@Column(name="created_on")	
 	private Date createdOn;
 	@Column(name="overall_recipe_rating")	
-	private int recipeRating;
+	private Float recipeRating;
 	@Column(name="overall_order_rating")	
-	private int orderRating;
+	private Float orderRating;
 	@Column(name="feedback")	
 	private String feedback;
 	
@@ -119,16 +120,16 @@ public class Order {
 	public void setCreatedOn(Date createdOn) {
 		this.createdOn = createdOn;
 	}
-	public int getRecipeRating() {
+	public Float getRecipeRating() {
 		return recipeRating;
 	}
-	public void setRecipeRating(int recipeRating) {
+	public void setRecipeRating(Float recipeRating) {
 		this.recipeRating = recipeRating;
 	}
-	public int getOrderRating() {
+	public Float getOrderRating() {
 		return orderRating;
 	}
-	public void setOrderRating(int orderRating) {
+	public void setOrderRating(Float orderRating) {
 		this.orderRating = orderRating;
 	}
 	public String getFeedback() {

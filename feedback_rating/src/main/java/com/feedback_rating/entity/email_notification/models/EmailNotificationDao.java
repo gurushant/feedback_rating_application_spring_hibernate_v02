@@ -12,13 +12,15 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.feedback_rating.entity.order.models.Order;
+import com.feedback_rating.entity.order.models.OrderKey;
+
 
 /**
  * @author gurushant.j
  *
  */
 @Repository
-@Transactional
 public class EmailNotificationDao {
 	@Autowired
 	private SessionFactory _sessionFactory;
@@ -28,11 +30,11 @@ public class EmailNotificationDao {
 		return _sessionFactory.getCurrentSession();
 	}
 	
-	public EmailNotification getEmailDetail(EmailNotifyKey key)
+	public EmailNotification getOrderDetail(EmailNotifyKey key)
 	{
 		return (EmailNotification) getSession().load(EmailNotification.class, key);
 	}
-	
+		
 	public void updateEmailNotification(EmailNotifyKey key,boolean isFeedbackReceived)
 	{
 		Session session=getSession();
@@ -42,7 +44,7 @@ public class EmailNotificationDao {
 		emailObj.setFeedbackExists(isFeedbackReceived);
 		session.saveOrUpdate(emailObj);
 		//session.getTransaction().commit();
-	//	session.disconnect();
+		//session.disconnect();
 	}
 	
 
