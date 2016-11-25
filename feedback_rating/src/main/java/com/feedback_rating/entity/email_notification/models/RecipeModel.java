@@ -3,10 +3,13 @@
  */
 package com.feedback_rating.entity.email_notification.models;
 
+import org.springframework.stereotype.Service;
+
 /**
  * @author gurushant.j
  *
  */
+@Service
 public class RecipeModel
 {
 	private String recipeName;
