@@ -65,4 +65,10 @@ public class OrderDaoService {
 		return response;
 
 	}
+	
+	public boolean updateOrderData(String feedback,float overallOrderRating,float overallRecipeRating,
+			String jsonRatingData,OrderKey key)
+	{
+		return orderDaoObj.updateOrderData(feedback, overallOrderRating, overallRecipeRating, jsonRatingData, key);
+	}
 }
