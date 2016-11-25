@@ -51,7 +51,7 @@ public class EmailNotificationDaoService {
 			EmailNotifyKey key=new EmailNotifyKey(emailObj.getOrderId(),emailObj.getRestId());
 			if(checkIsFeedbackReceived(key))
 			{
-				respModel=utils.getSucessResponse("Feedback exists for this order");
+				respModel=utils.getSucessResponse("Feedback already exists for this order");
 
 			}
 			else
