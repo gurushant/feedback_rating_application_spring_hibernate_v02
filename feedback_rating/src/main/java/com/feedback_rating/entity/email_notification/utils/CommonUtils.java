@@ -35,7 +35,6 @@ public class CommonUtils {
 	
 	public float roundUpRating(float rating)
 	{
-	    DecimalFormat df = new DecimalFormat("0.0");
 	    rating=(float) (rating/0.5);
 	    rating=Math.round(rating);
 	    return rating/2;

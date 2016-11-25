@@ -49,9 +49,18 @@ public class EmailNotificationDaoService {
 			List<Object> recipeList=emailObj.getRecipeList();
 			log.debug("Recipe list is =>"+recipeList.toString());
 			float recipeSumRating=utils.extractRating(emailObj.getRecipeList());
+			log.debug("Recipe rating sum is =>"+recipeSumRating);
 			float overallRecipeRating=utils.roundUpRating(recipeSumRating/recipeList.size());
 			log.debug("Overall recipe rating is=> "+overallRecipeRating);
+			log.debug("Economy rating is =>"+emailObj.getEconomyRate());
+			log.debug("Ambience rating is =>"+emailObj.getAmbienceRate());
+			log.debug("Qos rating is =>"+emailObj.getQosRate());
+			float overallOrderRating=(overallRecipeRating+emailObj.getEconomyRate()+
+									  emailObj.getAmbienceRate()+emailObj.getQosRate())/4;
+			overallOrderRating=utils.roundUpRating(overallOrderRating);
 			EmailNotifyKey key=new EmailNotifyKey(emailObj.getOrderId(),emailObj.getRestId());
+			log.debug("Overall order rating is=> "+overallOrderRating);
+
 			log.debug("Key in email_noficiation before update  is => "+key);
 			if(emailDao.updateEmailNotification(key, true))
 			{
@@ -75,7 +84,7 @@ public class EmailNotificationDaoService {
 			OrderKey orderKey=new OrderKey(emailObj.getOrderId(),emailObj.getRestId());
 			
 			if(orderDaoObj.updateOrderData(emailObj.getFeedbackTxt(), 
-								overallRecipeRating, overallRecipeRating, recipeArr.toString(), orderKey))
+					overallOrderRating, overallRecipeRating, recipeArr.toString(), orderKey))
 			{
 				log.debug("Succesfully updated orders table");
 			}
