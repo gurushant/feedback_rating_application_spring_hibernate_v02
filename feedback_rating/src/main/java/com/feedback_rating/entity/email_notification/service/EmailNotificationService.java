@@ -10,13 +10,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.feedback_rating.entity.email_notification.dao.api.EmailNotificationDaoAPI;
 import com.feedback_rating.entity.email_notification.dao.impl.EmailNotificationDaoImpl;
 import com.feedback_rating.entity.email_notification.domain.EmailNotificationObjectModel;
 import com.feedback_rating.entity.email_notification.utils.CommonUtils;
 import com.feedback_rating.entity.email_notification.utils.EmailNotifyKey;
 import com.feedback_rating.entity.email_notification.utils.ResponseModel;
-import com.feedback_rating.entity.order.dao.service.OrderDaoService;
+import com.feedback_rating.entity.order.dao.api.OrderDaoAPI;
 import com.feedback_rating.entity.order.models.OrderKey;
+import com.feedback_rating.entity.order.service.OrderService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -27,7 +29,7 @@ import com.google.gson.JsonObject;
  *
  */
 @Service
-public class EmailNotificationService {
+public class EmailNotificationService implements EmailNotificationApi{
 
 	private static final Logger log = LoggerFactory.getLogger(EmailNotificationService.class);
 
@@ -36,10 +38,10 @@ public class EmailNotificationService {
 	CommonUtils utils;
 
 	@Autowired
-	OrderDaoService orderDaoService;
+	OrderDaoAPI orderDaoService;
 
 	@Autowired
-	EmailNotificationDaoImpl emailDao;
+	EmailNotificationDaoAPI emailDao;
 
 	public ResponseModel postFeedback(String postPayload)
 	{

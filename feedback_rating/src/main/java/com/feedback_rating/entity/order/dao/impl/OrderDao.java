@@ -27,16 +27,17 @@ public class OrderDao implements OrderDaoAPI {
 	private static final Logger log = LoggerFactory.getLogger(OrderDao.class);
 
 	@Autowired
-	CommonUtils utils;
+	private CommonUtils utils;
 
 	@Autowired
 	private SessionFactory _sessionFactory;
 
-	private Session getSession()
+	public Session getSession()
 	{
 		return _sessionFactory.getCurrentSession();
 	}
 
+	
 	public Order getOrderDetail(OrderKey key)
 	{
 		Order retOrder=null;
@@ -58,20 +59,20 @@ public class OrderDao implements OrderDaoAPI {
 		boolean isSuccess=false;
 		try
 		{
-		Session session=getSession();
-		Order orderObj=(Order)session.load(Order.class, key);
-		orderObj.setFeedback(feedback);
-		orderObj.setOrderRating(overallOrderRating);
-		orderObj.setRecipeRating(overallRecipeRating);
-		orderObj.setRatingFeedback(jsonRatingData);
-		session.saveOrUpdate(orderObj);
-		isSuccess=true;
+			Session session=getSession();
+			Order orderObj=(Order)session.load(Order.class, key);
+			orderObj.setFeedback(feedback);
+			orderObj.setOrderRating(overallOrderRating);
+			orderObj.setRecipeRating(overallRecipeRating);
+			orderObj.setRatingFeedback(jsonRatingData);
+			session.saveOrUpdate(orderObj);
+			isSuccess=true;
 		}
 		catch(Exception ex)
 		{
 			isSuccess=false;
 			log.error("Error while updating orders table. Exception is => "+utils.getStackTrace(ex));
-			
+
 		}
 		return isSuccess;
 	}

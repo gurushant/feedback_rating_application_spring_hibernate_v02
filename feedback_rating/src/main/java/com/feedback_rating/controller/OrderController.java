@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.feedback_rating.entity.email_notification.service.EmailNotificationService;
 import com.feedback_rating.entity.email_notification.utils.ResponseModel;
-import com.feedback_rating.entity.order.dao.service.OrderDaoService;
+import com.feedback_rating.entity.order.service.OrderService;
 
 /**
  * @author gurushant.j
@@ -31,7 +31,7 @@ public class OrderController {
 	private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 
 	@Autowired
-	private OrderDaoService orderDaoService;
+	private OrderService orderDaoService;
 
 	@Autowired
 	private EmailNotificationService emailDaoService;

@@ -3,6 +3,8 @@
  */
 package com.feedback_rating.entity.order.dao.api;
 
+import org.hibernate.Session;
+
 import com.feedback_rating.entity.order.models.Order;
 import com.feedback_rating.entity.order.models.OrderKey;
 
@@ -14,7 +16,7 @@ public interface OrderDaoAPI {
 	public Order getOrderDetail(OrderKey key);
 	public boolean updateOrderData(String feedback,float overallOrderRating,float overallRecipeRating,
 			String jsonRatingData,OrderKey key);
-	
+	public Session getSession();
 
-	
+
 }
