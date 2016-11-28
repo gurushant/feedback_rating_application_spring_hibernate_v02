@@ -10,7 +10,7 @@
    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
     <!-- Name of the file where the log messages are written -->
    <!--  <file>/usr/local/apache-tomcat-7.0.73/feedback_server.log</file> -->
-     <file>feedback_server.log</file>
+     <file>/usr/local/apache-tomcat-7.0.73/feedback_server.log</file>
     <encoder>
       <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
     </encoder>
