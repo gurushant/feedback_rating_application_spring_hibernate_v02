@@ -5,14 +5,9 @@ package com.feedback_rating.entity.email_notification.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.DecimalFormat;
 import java.util.List;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import com.feedback_rating.entity.email_notification.models.ResponseModel;
 
 /**
  * @author gurushant.j

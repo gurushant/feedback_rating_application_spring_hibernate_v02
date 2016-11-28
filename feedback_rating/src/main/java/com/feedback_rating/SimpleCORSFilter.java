@@ -26,7 +26,7 @@ public class SimpleCORSFilter implements Filter {
 private final Logger log = LoggerFactory.getLogger(SimpleCORSFilter.class);
 
 public SimpleCORSFilter() {
-    log.info("SimpleCORSFilter init");
+    log.info("filter init");
 }
 
 @Override
