@@ -33,7 +33,7 @@ public class UserDao {
 		return;
 	}
 	
-	 public User getById(int id) 
+	 public User getById(Key id) 
 	 {
 		    return (User) getSession().load(User.class, id);
 	 }

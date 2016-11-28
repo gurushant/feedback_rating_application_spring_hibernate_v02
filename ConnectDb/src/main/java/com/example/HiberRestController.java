@@ -3,8 +3,10 @@ package com.example;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.hibernate_example.Key;
 import com.example.hibernate_example.User;
 import com.example.hibernate_example.UserDao;
 
@@ -15,9 +17,11 @@ public class HiberRestController {
 	@Autowired
 	private UserDao userDao;
 	
-	@RequestMapping("/user")
-	public String getUser()
+	@RequestMapping(value="/user",produces="application/json")
+	@ResponseBody
+	public User getUser()
 	{
-		return userDao.getById(1).getName();
+		Key k=new Key(2,2);
+		return userDao.getById(k);
 	}
 }
