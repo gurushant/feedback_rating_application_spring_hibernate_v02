@@ -10,6 +10,5 @@ public interface OrderServiceApi {
 	public boolean updateOrderData(String feedback,float overallOrderRating,float overallRecipeRating,
 			String jsonRatingData,OrderKey key);
 	public boolean isFeedbackExists(EmailNotifyKey emailKey);
-	public Order returnOrder(OrderKey key);
 
 }

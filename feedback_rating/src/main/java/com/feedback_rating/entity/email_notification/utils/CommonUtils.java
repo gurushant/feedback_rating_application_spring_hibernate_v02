@@ -28,6 +28,10 @@ public class CommonUtils {
 		return recipeRating;
 	}
 	
+	public void print()
+	{
+		System.out.println("Hello spring.........");
+	}
 	public float roundUpRating(float rating)
 	{
 	    rating=(float) (rating/0.5);

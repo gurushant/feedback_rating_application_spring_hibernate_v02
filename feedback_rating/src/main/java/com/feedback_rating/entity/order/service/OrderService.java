@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.feedback_rating.entity.email_notification.service.EmailNotificationApi;
 import com.feedback_rating.entity.email_notification.service.EmailNotificationService;
 import com.feedback_rating.entity.email_notification.utils.CommonUtils;
 import com.feedback_rating.entity.email_notification.utils.EmailNotifyKey;
@@ -26,38 +27,29 @@ public class OrderService implements OrderServiceApi {
 	private static final Logger log = LoggerFactory.getLogger(OrderService.class);
 
 	@Autowired
-	private CommonUtils utils;
+	public CommonUtils utils;
 
 	@Autowired
-	private OrderDaoAPI orderDaoObj;
+	public OrderDaoAPI orderDaoObj;
 
 	@Autowired
-	private EmailNotificationService emailDaoService;
+	public EmailNotificationApi emailDaoObj;
 
 	@Override
 	public boolean isFeedbackExists(EmailNotifyKey emailKey)
 	{
-		return emailDaoService.checkIsFeedbackReceived(emailKey);
+		return emailDaoObj.checkIsFeedbackReceived(emailKey);
 	}
 	
-	public Order returnOrder(OrderKey key)
-	{
-		EmailNotifyKey email=new EmailNotifyKey(key.getId(),key.getRestId());
-		if(isFeedbackExists(email)==false)
-		{
-			return 	orderDaoObj.getOrderDetail(key);
 
-		}
-		return null;
-	}
 	
+	@Override
 	public Object getOrderDetails(int orderId,int restId)
 	{
 		Object response=null;
 		try
 		{
 			EmailNotifyKey emailKey=new EmailNotifyKey(orderId, restId);
-			System.out.println("feedback is not received...");
 			boolean isFeedbackExist=isFeedbackExists(emailKey);
 			log.debug("Feedback for this order=>"+orderId+" is "+isFeedbackExist);
 			if(!isFeedbackExist)
