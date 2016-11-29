@@ -25,12 +25,26 @@ public class FeedbackServiceImplTest {
 	}
 
 	
+	/**
+	 * Following test method tests  roundUpRating method.
+	 */
 	@Test
-	public void testRoundUp()
+	public void testRoundUp_1()
 	{
 		float val=feedbackServiceObj.roundUpRating(2.1F);
 		float delta=0;
 		System.out.println(val);
 		assertEquals(2.0, val,delta);
+	}
+	/**
+	 * Following test method tests  roundUpRating method.
+	 */
+	@Test
+	public void testRoundUp_2()
+	{
+		float val=feedbackServiceObj.roundUpRating(2.8F);
+		float delta=0;
+		System.out.println(val);
+		assertEquals(3.0, val,delta);
 	}
 }
