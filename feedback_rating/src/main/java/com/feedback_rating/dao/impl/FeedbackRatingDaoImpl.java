@@ -44,25 +44,18 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 	public boolean checkIsFeedbackReceived(EmailNotifyKey key)
 	{
 		boolean isFeedbackExists=true;
-		try
+		Session session=getSession();
+		Date feedbackReceivedTime = (Date)session.createCriteria(EmailNotification.class)
+				.add(Restrictions.eq("isFeedbackExists",true))
+				.add(Restrictions.eq("key",key))
+				.setProjection(Property.forName("feedbackReceivedTime"))
+				.uniqueResult();
+		if(feedbackReceivedTime!=null)
 		{
-			Session session=getSession();
-			Date feedbackReceivedTime = (Date)session.createCriteria(EmailNotification.class)
-					.add(Restrictions.eq("isFeedbackExists",true))
-					.add(Restrictions.eq("key",key))
-					.setProjection(Property.forName("feedbackReceivedTime"))
-					.uniqueResult();
-			if(feedbackReceivedTime!=null)
-			{
-				isFeedbackExists=true;
-			}
-			else
-				isFeedbackExists=false;
+			isFeedbackExists=true;
 		}
-		catch(Exception ex)
-		{
-			log.error("Error occured.Exception stacktrace is =>"+utils.getStackTrace(ex));
-		}
+		else
+			isFeedbackExists=false;
 		return isFeedbackExists;
 	}
 
@@ -103,15 +96,10 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 	public Order getOrderDetail(OrderKey key)
 	{
 		Order retOrder=null;
-		try
-		{
-			Session session=getSession();
-			retOrder=(Order) session.load(Order.class, key);
-		}
-		catch(Exception ex)
-		{
-			log.error("Error while getting order detail. Exception is => "+utils.getStackTrace(ex));
-		}
+
+		Session session=getSession();
+		retOrder=(Order) session.load(Order.class, key);
+
 		return retOrder;
 	}
 
@@ -122,23 +110,16 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 			String jsonRatingData,OrderKey key)
 	{
 		boolean isSuccess=false;
-		try
-		{
-			Session session=getSession();
-			Order orderObj=(Order)session.load(Order.class, key);
-			orderObj.setFeedback(feedback);
-			orderObj.setOrderRating(overallOrderRating);
-			orderObj.setRecipeRating(overallRecipeRating);
-			orderObj.setRatingFeedback(jsonRatingData);
-			session.saveOrUpdate(orderObj);
-			isSuccess=true;
-		}
-		catch(Exception ex)
-		{
-			isSuccess=false;
-			log.error("Error while updating orders table. Exception is => "+utils.getStackTrace(ex));
 
-		}
+		Session session=getSession();
+		Order orderObj=(Order)session.load(Order.class, key);
+		orderObj.setFeedback(feedback);
+		orderObj.setOrderRating(overallOrderRating);
+		orderObj.setRecipeRating(overallRecipeRating);
+		orderObj.setRatingFeedback(jsonRatingData);
+		session.saveOrUpdate(orderObj);
+		isSuccess=true;
+
 		return isSuccess;
 	}
 

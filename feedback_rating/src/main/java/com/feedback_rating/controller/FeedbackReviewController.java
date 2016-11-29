@@ -44,15 +44,8 @@ public class FeedbackReviewController {
 	public OrderResponseApi getOrderDetail(@QueryParam("orderId") int orderId,@QueryParam("restId") int restId)
 	{
 		OrderResponseApi response=null;
-		try
-		{
-			log.info("Hitting get order detail api.Order id is "+orderId+",Rest Id is "+restId);
-			response=feedbackServiceObj.getOrderDetails(orderId, restId);
-		}
-		catch(Exception ex)
-		{
-			log.error("Error occured");
-		}
+		log.info("Hitting get order detail api.Order id is "+orderId+",Rest Id is "+restId);
+		response=feedbackServiceObj.getOrderDetails(orderId, restId);
 		return response;
 	}
 
