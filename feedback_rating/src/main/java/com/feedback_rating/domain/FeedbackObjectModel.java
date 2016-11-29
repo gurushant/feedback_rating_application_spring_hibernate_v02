@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.feedback_rating.entity.email_notification.domain;
+package com.feedback_rating.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import com.google.gson.annotations.SerializedName;
  * @author gurushant.j
  *
  */
-public class EmailNotificationObjectModel {
+public class FeedbackObjectModel {
 	@SerializedName("order_id")
 	private Integer orderId;
 	@SerializedName("restaruent_id")

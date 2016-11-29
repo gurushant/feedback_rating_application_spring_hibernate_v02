@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.feedback_rating.entity.email_notification.service;
+package com.feedback_rating.feedback_service.impl;
 
 import java.util.List;
 
@@ -10,15 +10,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.feedback_rating.entity.email_notification.dao.api.EmailNotificationDaoAPI;
-import com.feedback_rating.entity.email_notification.dao.impl.EmailNotificationDaoImpl;
-import com.feedback_rating.entity.email_notification.domain.EmailNotificationObjectModel;
-import com.feedback_rating.entity.email_notification.utils.CommonUtils;
-import com.feedback_rating.entity.email_notification.utils.EmailNotifyKey;
-import com.feedback_rating.entity.email_notification.utils.ResponseModel;
-import com.feedback_rating.entity.order.dao.api.OrderDaoAPI;
-import com.feedback_rating.entity.order.models.OrderKey;
-import com.feedback_rating.entity.order.service.OrderService;
+import com.feedback_rating.dao.api.FeedbackRatingDaoAPI;
+import com.feedback_rating.domain.FeedbackObjectModel;
+import com.feedback_rating.domain.FeedbackResponseModel;
+import com.feedback_rating.entity.utils.CommonUtils;
+import com.feedback_rating.feedback_service.api.FeedbackServiceApi;
+import com.feedback_rating.models.Order;
+import com.feedback_rating.models.keys.EmailNotifyKey;
+import com.feedback_rating.models.keys.OrderKey;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -29,31 +28,27 @@ import com.google.gson.JsonObject;
  *
  */
 @Service
-public class EmailNotificationService implements EmailNotificationApi{
-
-	private static final Logger log = LoggerFactory.getLogger(EmailNotificationService.class);
+public class FeedbackServiceImpl implements FeedbackServiceApi {
+	private static final Logger log = LoggerFactory.getLogger(FeedbackServiceImpl.class);
 
 
 	@Autowired
 	CommonUtils utils;
 
 	@Autowired
-	OrderDaoAPI orderDaoService;
+	FeedbackRatingDaoAPI feedbackRatingDaoObj;
 
-	@Autowired
-	EmailNotificationDaoAPI emailDao;
-
-	public ResponseModel postFeedback(String postPayload)
+	public FeedbackResponseModel postFeedback(String postPayload)
 	{
-		ResponseModel respModel=new ResponseModel();
+		FeedbackResponseModel respModel=new FeedbackResponseModel();
 		try
 		{
 			log.debug("Received payload is => "+postPayload);
 
 			Gson gson=new GsonBuilder().create();
-			EmailNotificationObjectModel emailObj=gson.fromJson(postPayload, EmailNotificationObjectModel.class);
+			FeedbackObjectModel emailObj=gson.fromJson(postPayload, FeedbackObjectModel.class);
 			EmailNotifyKey key=new EmailNotifyKey(emailObj.getOrderId(),emailObj.getRestId());
-			if(checkIsFeedbackReceived(key))
+			if(isFeedbackExists(key))
 			{
 				respModel=utils.getSucessResponse("Feedback already exists for this order");
 
@@ -75,7 +70,7 @@ public class EmailNotificationService implements EmailNotificationApi{
 				log.debug("Overall order rating is=> "+overallOrderRating);
 
 				log.debug("Key in email_noficiation before update  is => "+key);
-				if(emailDao.updateEmailNotification(key, true))
+				if(feedbackRatingDaoObj.updateEmailNotification(key, true))
 				{
 					log.debug("Succesfully updated email_notification table");
 				}
@@ -96,7 +91,7 @@ public class EmailNotificationService implements EmailNotificationApi{
 				log.debug("Updating orders table");
 				OrderKey orderKey=new OrderKey(emailObj.getOrderId(),emailObj.getRestId());
 
-				if(orderDaoService.updateOrderData(emailObj.getFeedbackTxt(), 
+				if(feedbackRatingDaoObj.updateOrderData(emailObj.getFeedbackTxt(), 
 						overallOrderRating, overallRecipeRating, recipeArr.toString(), orderKey))
 				{
 					log.debug("Succesfully updated orders table");
@@ -119,8 +114,53 @@ public class EmailNotificationService implements EmailNotificationApi{
 
 	}
 
-	public boolean checkIsFeedbackReceived(EmailNotifyKey key)
+	public boolean isFeedbackExists(EmailNotifyKey key)
 	{
-		return emailDao.checkIsFeedbackReceived(key);
+		return feedbackRatingDaoObj.checkIsFeedbackReceived(key);
 	}
+
+	//Order related service methods
+	@Override
+	public Object getOrderDetails(int orderId,int restId)
+	{
+		Object response=null;
+		try
+		{
+			EmailNotifyKey emailKey=new EmailNotifyKey(orderId, restId);
+			boolean isFeedbackExist=isFeedbackExists(emailKey);
+			log.debug("Feedback for this order=>"+orderId+" is "+isFeedbackExist);
+			if(!isFeedbackExist)
+			{
+				OrderKey key=new OrderKey(orderId,restId);
+				log.debug("Request received to get order details.=>"+key);
+				Order orderObj=feedbackRatingDaoObj.getOrderDetail(key);
+				orderObj.setMessage("Order is successfully retrieved");
+				orderObj.setStatus("SUCCESS");
+				response= orderObj;
+				log.debug("Get Order details api response is => "+response);
+			}
+			else
+			{
+				FeedbackResponseModel responseModel=new FeedbackResponseModel();
+				responseModel.setMessage("Feedback already received for this order");
+				responseModel.setStatus("SUCCESS");
+				response=responseModel;
+			}
+		}
+		catch(Exception ex)
+		{
+			log.error("Error occured.Stacktrace is => "+utils.getStackTrace(ex));
+			response= utils.getErrorResponse("Please check the correct order Id or try again later");
+		}
+		return response;
+
+	}
+	
+	public boolean updateOrderData(String feedback,float overallOrderRating,float overallRecipeRating,
+			String jsonRatingData,OrderKey key)
+	{
+		return feedbackRatingDaoObj.updateOrderData(feedback, overallOrderRating, overallRecipeRating, jsonRatingData, key);
+	}
+
+	
 }

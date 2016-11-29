@@ -1,13 +1,15 @@
 /**
  * 
  */
-package com.feedback_rating.entity.email_notification.utils;
+package com.feedback_rating.entity.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.feedback_rating.domain.FeedbackResponseModel;
 
 /**
  * @author gurushant.j
@@ -28,10 +30,7 @@ public class CommonUtils {
 		return recipeRating;
 	}
 	
-	public void print()
-	{
-		System.out.println("Hello spring.........");
-	}
+	
 	public float roundUpRating(float rating)
 	{
 	    rating=(float) (rating/0.5);
@@ -47,17 +46,17 @@ public class CommonUtils {
 		return wr.toString();
 	}
 
-	public ResponseModel getErrorResponse(String message)
+	public FeedbackResponseModel getErrorResponse(String message)
 	{
-		ResponseModel respModel=new ResponseModel();
+		FeedbackResponseModel respModel=new FeedbackResponseModel();
 		respModel.setMessage(message);
 		respModel.setStatus("ERROR");
 		return respModel;
 	}
 	
-	public ResponseModel getSucessResponse(String message)
+	public FeedbackResponseModel getSucessResponse(String message)
 	{
-		ResponseModel respModel=new ResponseModel();
+		FeedbackResponseModel respModel=new FeedbackResponseModel();
 		respModel.setMessage(message);
 		respModel.setStatus("SUCCESS");
 		return respModel;

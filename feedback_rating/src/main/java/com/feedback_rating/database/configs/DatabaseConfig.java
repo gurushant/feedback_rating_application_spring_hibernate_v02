@@ -1,4 +1,4 @@
-package com.feedback_rating.configs;
+package com.feedback_rating.database.configs;
 
 import java.util.Properties;
 

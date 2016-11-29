@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.feedback_rating.entity.order.models;
+package com.feedback_rating.models;
 
 import java.util.Date;
 
@@ -13,6 +13,7 @@ import javax.persistence.Transient;
 import javax.transaction.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.feedback_rating.models.keys.OrderKey;
 
 /**
  * @author gurushant.j

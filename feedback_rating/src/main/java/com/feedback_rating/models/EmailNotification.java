@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.feedback_rating.entity.email_notification.model;
+package com.feedback_rating.models;
 
 import java.util.Date;
 
@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.feedback_rating.entity.email_notification.utils.EmailNotifyKey;
+import com.feedback_rating.models.keys.EmailNotifyKey;
 
 
 /**

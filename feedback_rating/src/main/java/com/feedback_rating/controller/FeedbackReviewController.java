@@ -15,26 +15,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.feedback_rating.entity.email_notification.service.EmailNotificationService;
-import com.feedback_rating.entity.email_notification.utils.ResponseModel;
-import com.feedback_rating.entity.order.service.OrderService;
+import com.feedback_rating.domain.FeedbackResponseModel;
+import com.feedback_rating.feedback_service.api.FeedbackServiceApi;
 
 /**
  * @author gurushant.j
  *
  */
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/feedbackReview")
 @Transactional
-public class OrderController {
+public class FeedbackReviewController {
 
-	private static final Logger log = LoggerFactory.getLogger(OrderController.class);
-
-	@Autowired
-	private OrderService orderDaoService;
+	private static final Logger log = LoggerFactory.getLogger(FeedbackReviewController.class);
 
 	@Autowired
-	private EmailNotificationService emailDaoService;
+	private FeedbackServiceApi feedbackServiceObj;
+
 
 	
 	@RequestMapping(value="/getOrderDetail",
@@ -43,22 +40,18 @@ public class OrderController {
 	@ResponseBody
 	public Object getOrderDetail(@QueryParam("orderId") int orderId,@QueryParam("restId") int restId)
 	{
-		return orderDaoService.getOrderDetails(orderId, restId);
+		return feedbackServiceObj.getOrderDetails(orderId, restId);
 	}
 
-	 @RequestMapping("/")
-	 public String gethelloWorld() {
-	        return "Hello World!";
-	    }
 
 	@RequestMapping(value="/postFeedback",
 			produces="application/json",
 			consumes="application/json",
 			method=RequestMethod.POST	)
 	@ResponseBody
-	public ResponseModel postFeedback(@RequestBody String postPayload)
+	public FeedbackResponseModel postFeedback(@RequestBody String postPayload)
 	{
-		return emailDaoService.postFeedback(postPayload);
+		return feedbackServiceObj.postFeedback(postPayload);
 	}
 
 }

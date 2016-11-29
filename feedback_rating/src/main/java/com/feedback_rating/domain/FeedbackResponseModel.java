@@ -1,13 +1,13 @@
 /**
  * 
  */
-package com.feedback_rating.entity.email_notification.utils;
+package com.feedback_rating.domain;
 
 /**
  * @author gurushant.j
  *
  */
-public class ResponseModel {
+public class FeedbackResponseModel {
 	private String status;
 	private String message;
 	public String getStatus() {
