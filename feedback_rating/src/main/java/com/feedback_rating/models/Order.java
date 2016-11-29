@@ -10,9 +10,9 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.transaction.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.feedback_rating.domain.OrderResponseApi;
 import com.feedback_rating.models.keys.OrderKey;
 
 /**
@@ -22,7 +22,7 @@ import com.feedback_rating.models.keys.OrderKey;
 @Entity
 @Table(name="orders")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Order {
+public class Order implements OrderResponseApi{
 	
 	@Transient
 	private String status;

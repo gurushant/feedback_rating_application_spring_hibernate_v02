@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import com.feedback_rating.dao.api.FeedbackRatingDaoAPI;
 import com.feedback_rating.domain.FeedbackDomainObject;
 import com.feedback_rating.domain.FeedbackResponseModel;
+import com.feedback_rating.domain.OrderResponseApi;
+import com.feedback_rating.domain.OrderResponseModel;
 import com.feedback_rating.feedback_service.api.FeedbackServiceApi;
 import com.feedback_rating.models.Order;
 import com.feedback_rating.models.keys.EmailNotifyKey;
@@ -111,6 +113,15 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 
 			}
 		}
+		catch(ObjectNotFoundException ex)
+		{
+			log.error("Error occured.Stacktrace is => "+getStackTrace(ex));
+			FeedbackResponseModel responseModel=new FeedbackResponseModel();
+			responseModel.setMessage("No matching records found in db.");
+			responseModel.setStatus("SUCCESS");
+			respModel=responseModel;
+
+		}
 		catch(Exception ex)
 		{
 			log.error("Error occured in postback method.Stacktrace is => "+getStackTrace(ex));
@@ -133,9 +144,9 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 	 * Returns order details response.
 	 */
 	@Override
-	public Object getOrderDetails(int orderId,int restId)
+	public OrderResponseApi getOrderDetails(int orderId,int restId)
 	{
-		Object response=null;
+		OrderResponseApi response=null;
 		try
 		{
 			EmailNotifyKey emailKey=new EmailNotifyKey(orderId, restId);
@@ -146,6 +157,7 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 				OrderKey key=new OrderKey(orderId,restId);
 				log.debug("Request received to get order details.=>"+key);
 				Order orderObj=feedbackRatingDaoObj.getOrderDetail(key);
+
 				orderObj.setMessage("Order is successfully retrieved");
 				orderObj.setStatus("SUCCESS");
 				response= orderObj;
@@ -153,21 +165,27 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 			}
 			else
 			{
-				FeedbackResponseModel responseModel=new FeedbackResponseModel();
+				OrderResponseModel responseModel=new OrderResponseModel();
 				responseModel.setMessage("Feedback already received for this order");
 				responseModel.setStatus("SUCCESS");
+				response=responseModel;
 			}
 		}
 		catch(ObjectNotFoundException ex)
 		{
 			log.error("Error occured.Stacktrace is => "+getStackTrace(ex));
-			response= getSucessResponse("No rows found in db.Please check the correct order Id or restaurent Id .");
-			response=null;
+			OrderResponseModel responseModel=new OrderResponseModel();
+			responseModel.setMessage("No matching records found in db.");
+			responseModel.setStatus("SUCCESS");
+			response=responseModel;
 		}
 		catch(Exception ex)
 		{
 			log.error("Error occured.Stacktrace is => "+getStackTrace(ex));
-			response= getErrorResponse("Error ocuured .Please try again latter.");
+			OrderResponseModel responseModel=new OrderResponseModel();
+			responseModel.setMessage("Error occured.Please try again latter.");
+			responseModel.setStatus("ERROR");
+			response=responseModel;
 		}
 		return response;
 

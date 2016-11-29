@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.feedback_rating.domain.FeedbackResponseModel;
+import com.feedback_rating.domain.OrderResponseApi;
 import com.feedback_rating.feedback_service.api.FeedbackServiceApi;
 
 
@@ -40,9 +41,9 @@ public class FeedbackReviewController {
 			produces="application/json",
 			method=RequestMethod.GET)
 	@ResponseBody
-	public Object getOrderDetail(@QueryParam("orderId") int orderId,@QueryParam("restId") int restId)
+	public OrderResponseApi getOrderDetail(@QueryParam("orderId") int orderId,@QueryParam("restId") int restId)
 	{
-		Object response=null;
+		OrderResponseApi response=null;
 		try
 		{
 			log.info("Hitting get order detail api.Order id is "+orderId+",Rest Id is "+restId);
