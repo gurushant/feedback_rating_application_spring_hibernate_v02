@@ -5,7 +5,7 @@ package com.feedback_rating.domain;
 
 /**
  * @author gurushant.j
- *
+ * This is the response object of the post feedback and rating response.
  */
 public class FeedbackResponseModel {
 	private String status;

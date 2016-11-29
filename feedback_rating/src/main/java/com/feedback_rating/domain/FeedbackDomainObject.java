@@ -8,17 +8,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * @author gurushant.j
- *
+ * This class is used to convert feedback payload into the object.
  */
-public class FeedbackObjectModel {
+public class FeedbackDomainObject {
 	@SerializedName("order_id")
 	private Integer orderId;
 	@SerializedName("restaruent_id")
 	private Integer restId;
+	@NotNull
 	@SerializedName("economy")
 	private Float economyRate;
 	@SerializedName("ambience")

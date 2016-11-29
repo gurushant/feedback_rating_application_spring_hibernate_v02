@@ -32,6 +32,10 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 		return _sessionFactory.getCurrentSession();
 	}
 
+	/**
+	 * Checks whether feedback is already exists in database.
+	 * If exists return true else false
+	 */
 	public boolean checkIsFeedbackReceived(EmailNotifyKey key)
 	{
 		boolean isFeedbackExists=true;
@@ -57,6 +61,9 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 		return isFeedbackExists;
 	}
 
+	/**
+	 * This method is used to get email details.
+	 */
 	public EmailNotification getEmailDetail(EmailNotifyKey key)
 	{
 		try
@@ -70,6 +77,9 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 		}
 	}
 
+	/**
+	 * This method is used to update the order's feedback and rating status into the db.
+	 */
 	public boolean updateEmailNotification(EmailNotifyKey key,boolean isFeedbackReceived)
 	{
 		boolean isSuccess=false;
@@ -89,8 +99,10 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 		}
 		return isSuccess;
 	}
-	
-	//Order related Dao implementation
+
+	/**
+	 * This method is used to fetch order details from the database.
+	 */
 	public Order getOrderDetail(OrderKey key)
 	{
 		Order retOrder=null;
@@ -106,6 +118,9 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 		return retOrder;
 	}
 
+	/**
+	 * This method is used to update the order's feedback and rating status into the order table .
+	 */
 	public boolean updateOrderData(String feedback,float overallOrderRating,float overallRecipeRating,
 			String jsonRatingData,OrderKey key)
 	{

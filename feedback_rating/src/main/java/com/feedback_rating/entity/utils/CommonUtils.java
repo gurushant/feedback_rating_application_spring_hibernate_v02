@@ -17,28 +17,13 @@ import com.feedback_rating.domain.FeedbackResponseModel;
  */
 @Service
 public class CommonUtils {
-	
-	
-	public float extractRating(List<Object> recipeList)
-	{
-		float recipeRating=0;
-		for(Object recipe:recipeList)
-		{
-			String tempRecipe=recipe.toString();
-			recipeRating+=Float.parseFloat(tempRecipe.split(":")[1]);
-		}
-		return recipeRating;
-	}
-	
-	
-	public float roundUpRating(float rating)
-	{
-	    rating=(float) (rating/0.5);
-	    rating=Math.round(rating);
-	    return rating/2;
 
-	}
-	
+	/**
+	 * This method is used to convert exception stacktrace into the string object.
+	 * @param ex
+	 * @return
+	 */
+
 	public String getStackTrace(Exception ex)
 	{
 		StringWriter wr=new  StringWriter();
@@ -46,19 +31,4 @@ public class CommonUtils {
 		return wr.toString();
 	}
 
-	public FeedbackResponseModel getErrorResponse(String message)
-	{
-		FeedbackResponseModel respModel=new FeedbackResponseModel();
-		respModel.setMessage(message);
-		respModel.setStatus("ERROR");
-		return respModel;
-	}
-	
-	public FeedbackResponseModel getSucessResponse(String message)
-	{
-		FeedbackResponseModel respModel=new FeedbackResponseModel();
-		respModel.setMessage(message);
-		respModel.setStatus("SUCCESS");
-		return respModel;
-	}
 }
