@@ -1,6 +1,13 @@
-package com.feedback_rating.domain;
+package com.feedback_rating.models;
 
-public class OrderResponseModel implements OrderResponseApi {
+import com.feedback_rating.models.api.OrderResponseApi;
+
+/**
+ * Order response in case of error,row now found,feedback already exists cases.
+ * @author gurushant.j
+ *
+ */
+public class OrderStatus implements OrderResponseApi {
 	private String status;
 	private String message;
 	public String getStatus() {

@@ -12,10 +12,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.feedback_rating.domain.OrderResponseApi;
+import com.feedback_rating.models.api.OrderResponseApi;
 import com.feedback_rating.models.keys.OrderKey;
 
 /**
+ * This is the order entity mapped to the orders table.
  * @author gurushant.j
  *
  */

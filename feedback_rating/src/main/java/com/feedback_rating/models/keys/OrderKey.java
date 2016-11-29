@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
+ * Custom composite key for Order entity
  * @author gurushant.j
  *
  */

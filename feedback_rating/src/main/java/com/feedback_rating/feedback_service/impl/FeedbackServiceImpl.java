@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service;
 
 import com.feedback_rating.dao.api.FeedbackRatingDaoAPI;
 import com.feedback_rating.domain.FeedbackDomainObject;
-import com.feedback_rating.domain.FeedbackResponseModel;
-import com.feedback_rating.domain.OrderResponseApi;
-import com.feedback_rating.domain.OrderResponseModel;
 import com.feedback_rating.feedback_service.api.FeedbackServiceApi;
+import com.feedback_rating.models.FeedbackResponse;
 import com.feedback_rating.models.Order;
+import com.feedback_rating.models.OrderStatus;
+import com.feedback_rating.models.api.OrderResponseApi;
 import com.feedback_rating.models.keys.EmailNotifyKey;
 import com.feedback_rating.models.keys.OrderKey;
 import com.google.gson.Gson;
@@ -42,9 +42,9 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 	/**
 	 * This method is used to update the order's status into the email_notificats table.
 	 */
-	public FeedbackResponseModel postFeedback(String postPayload)
+	public FeedbackResponse postFeedback(String postPayload)
 	{
-		FeedbackResponseModel respModel=new FeedbackResponseModel();
+		FeedbackResponse respModel=new FeedbackResponse();
 		try
 		{
 			log.debug("Received payload is => "+postPayload);
@@ -116,7 +116,7 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 		catch(ObjectNotFoundException ex)
 		{
 			log.error("Error occured.Stacktrace is => "+getStackTrace(ex));
-			FeedbackResponseModel responseModel=new FeedbackResponseModel();
+			FeedbackResponse responseModel=new FeedbackResponse();
 			responseModel.setMessage("No matching records found in db.");
 			responseModel.setStatus("SUCCESS");
 			respModel=responseModel;
@@ -165,7 +165,7 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 			}
 			else
 			{
-				OrderResponseModel responseModel=new OrderResponseModel();
+				OrderStatus responseModel=new OrderStatus();
 				responseModel.setMessage("Feedback already received for this order");
 				responseModel.setStatus("SUCCESS");
 				response=responseModel;
@@ -174,7 +174,7 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 		catch(ObjectNotFoundException ex)
 		{
 			log.error("Error occured.Stacktrace is => "+getStackTrace(ex));
-			OrderResponseModel responseModel=new OrderResponseModel();
+			OrderStatus responseModel=new OrderStatus();
 			responseModel.setMessage("No matching records found in db.");
 			responseModel.setStatus("SUCCESS");
 			response=responseModel;
@@ -182,7 +182,7 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 		catch(Exception ex)
 		{
 			log.error("Error occured.Stacktrace is => "+getStackTrace(ex));
-			OrderResponseModel responseModel=new OrderResponseModel();
+			OrderStatus responseModel=new OrderStatus();
 			responseModel.setMessage("Error occured.Please try again latter.");
 			responseModel.setStatus("ERROR");
 			response=responseModel;
@@ -247,9 +247,9 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 	 * @param message
 	 * @return
 	 */
-	public FeedbackResponseModel getErrorResponse(String message)
+	public FeedbackResponse getErrorResponse(String message)
 	{
-		FeedbackResponseModel respModel=new FeedbackResponseModel();
+		FeedbackResponse respModel=new FeedbackResponse();
 		respModel.setMessage(message);
 		respModel.setStatus("ERROR");
 		return respModel;
@@ -260,9 +260,9 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 	 * @param message
 	 * @return
 	 */
-	public FeedbackResponseModel getSucessResponse(String message)
+	public FeedbackResponse getSucessResponse(String message)
 	{
-		FeedbackResponseModel respModel=new FeedbackResponseModel();
+		FeedbackResponse respModel=new FeedbackResponse();
 		respModel.setMessage(message);
 		respModel.setStatus("SUCCESS");
 		return respModel;

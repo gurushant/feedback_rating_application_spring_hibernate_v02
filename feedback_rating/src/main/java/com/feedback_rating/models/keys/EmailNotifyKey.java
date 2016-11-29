@@ -10,6 +10,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 
 /**
+ * Custom composite key for EmailNotification entity
  * @author gurushant.j
  *
  */

@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.feedback_rating.domain.FeedbackResponseModel;
-import com.feedback_rating.domain.OrderResponseApi;
 import com.feedback_rating.feedback_service.api.FeedbackServiceApi;
+import com.feedback_rating.models.FeedbackResponse;
+import com.feedback_rating.models.api.OrderResponseApi;
 
 
 @RestController
@@ -67,7 +67,7 @@ public class FeedbackReviewController {
 			consumes="application/json",
 			method=RequestMethod.POST	)
 	@ResponseBody
-	public FeedbackResponseModel postFeedback(@RequestBody String postPayload)
+	public FeedbackResponse postFeedback(@RequestBody String postPayload)
 	{
 		log.info("Hitting post feedback api.Payload is "+postPayload);
 		return feedbackServiceObj.postFeedback(postPayload);

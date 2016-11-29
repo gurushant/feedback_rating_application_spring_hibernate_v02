@@ -1,13 +1,13 @@
 /**
  * 
  */
-package com.feedback_rating.domain;
+package com.feedback_rating.models;
 
 /**
  * @author gurushant.j
  * This is the response object of the post feedback and rating response.
  */
-public class FeedbackResponseModel {
+public class FeedbackResponse {
 	private String status;
 	private String message;
 	public String getStatus() {

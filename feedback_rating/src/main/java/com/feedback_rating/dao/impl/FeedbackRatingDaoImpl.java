@@ -12,12 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.feedback_rating.dao.api.FeedbackRatingDaoAPI;
-import com.feedback_rating.entity.utils.CommonUtils;
 import com.feedback_rating.models.EmailNotification;
 import com.feedback_rating.models.Order;
 import com.feedback_rating.models.keys.EmailNotifyKey;
 import com.feedback_rating.models.keys.OrderKey;
+import com.feedback_rating.utils.CommonUtils;
 
+/**
+ * This class implements FeedbackRatingDaoAPI interface
+ * @author gurushant.j
+ *
+ */
 @Repository
 public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 	private static final Logger log = LoggerFactory.getLogger(FeedbackRatingDaoImpl.class);

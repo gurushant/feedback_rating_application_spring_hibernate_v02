@@ -1,15 +1,12 @@
 /**
  * 
  */
-package com.feedback_rating.entity.utils;
+package com.feedback_rating.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.List;
 
 import org.springframework.stereotype.Service;
-
-import com.feedback_rating.domain.FeedbackResponseModel;
 
 /**
  * @author gurushant.j
