@@ -21,8 +21,8 @@ testModule.controller('testCtrl',function($scope,$http,$window,$attrs)
   				};
 
 
-
-	$http.get("http://"+serverIpAddress+":8080/orders/getOrderDetail?orderId="+orderId+"&restId="+restaruentId,config).success(function(response)
+  				//demo-0.0.1-SNAPSHOT
+	$http.get("http://"+serverIpAddress+":8080/feedbackReview/getOrderDetail?orderId="+orderId+"&restId="+restaruentId,config).success(function(response)
 					{
 						
 						if(response.status=='ERROR')
@@ -30,9 +30,9 @@ testModule.controller('testCtrl',function($scope,$http,$window,$attrs)
 							alert(response.message);
 							return;
 						}
-						if(response.message=='Order not found')
+						if(response.message=='Feedback already received for this order')
 						{
-							alert('Order does not exist in system');
+							alert(response.message);
 							return;
 						}
 						if(response.message=='Feedback already received for this order')
@@ -40,7 +40,7 @@ testModule.controller('testCtrl',function($scope,$http,$window,$attrs)
 							alert(response.message);
 							return;
 						}
-						if(response.message=='"Please check the correct order Id or try again later')
+						if(response.message=='No matching records found in db.')
 						{
 							alert(response.message);
 							return;
@@ -155,7 +155,7 @@ testModule.controller('testCtrl',function($scope,$http,$window,$attrs)
 
 		//Calling rest api to save rating and feedback.
 		//demo-0.0.1-SNAPSHOT
-		$http.post("http://"+serverIpAddress+":8080/orders/postFeedback",ratingMap,config).success(function(response)
+		$http.post("http://"+serverIpAddress+":8080/feedbackReview/postFeedback",ratingMap,config).success(function(response)
 					{
 						console.log('Response is '+response);
 						console.log("response=>"+response.message);
