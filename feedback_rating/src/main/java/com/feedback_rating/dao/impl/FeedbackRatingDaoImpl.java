@@ -88,20 +88,12 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 	public boolean updateEmailNotification(EmailNotifyKey key,boolean isFeedbackReceived)
 	{
 		boolean isSuccess=false;
-		try
-		{
-			Session session=getSession();
-			EmailNotification emailObj=(EmailNotification)session.load(EmailNotification.class, key);
-			emailObj.setFeedbackReceivedTime(new Date());
-			emailObj.setFeedbackExists(isFeedbackReceived);
-			session.saveOrUpdate(emailObj);
-			isSuccess=true;
-		}
-		catch(Exception ex)
-		{
-			isSuccess=false;
-			log.error("Error occured.Exception stacktrace is =>"+utils.getStackTrace(ex));
-		}
+		Session session=getSession();
+		EmailNotification emailObj=(EmailNotification)session.load(EmailNotification.class, key);
+		emailObj.setFeedbackReceivedTime(new Date());
+		emailObj.setFeedbackExists(isFeedbackReceived);
+		session.saveOrUpdate(emailObj);
+		isSuccess=true;
 		return isSuccess;
 	}
 

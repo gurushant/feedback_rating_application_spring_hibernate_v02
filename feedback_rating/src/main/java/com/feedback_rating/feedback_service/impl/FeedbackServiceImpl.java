@@ -11,6 +11,7 @@ import org.hibernate.ObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.HibernateObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
 import com.feedback_rating.dao.api.FeedbackRatingDaoAPI;
@@ -50,8 +51,8 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 			log.debug("Received payload is => "+postPayload);
 
 			Gson gson=new GsonBuilder().create();
-			FeedbackDomainObject emailObj=gson.fromJson(postPayload, FeedbackDomainObject.class);
-			EmailNotifyKey key=new EmailNotifyKey(emailObj.getOrderId(),emailObj.getRestId());
+			FeedbackDomainObject feedbackObj=gson.fromJson(postPayload, FeedbackDomainObject.class);
+			EmailNotifyKey key=new EmailNotifyKey(feedbackObj.getOrderId(),feedbackObj.getRestId());
 			if(isFeedbackExists(key))
 			{
 				respModel=getSucessResponse("Feedback already exists for this order");
@@ -59,61 +60,10 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 			}
 			else
 			{
-				List<Object> recipeList=emailObj.getRecipeList();
-				log.debug("Recipe list is =>"+recipeList.toString());
-				float recipeSumRating=extractRating(emailObj.getRecipeList());
-				log.debug("Recipe rating sum is =>"+recipeSumRating);
-				float overallRecipeRating=roundUpRating(recipeSumRating/recipeList.size());
-				log.debug("Overall recipe rating is=> "+overallRecipeRating);
-				log.debug("Economy rating is =>"+emailObj.getEconomyRate());
-				log.debug("Ambience rating is =>"+emailObj.getAmbienceRate());
-				log.debug("Qos rating is =>"+emailObj.getQosRate());
-
-				float overallOrderRating=(overallRecipeRating+emailObj.getEconomyRate()+
-						emailObj.getAmbienceRate()+emailObj.getQosRate())/4;
-				overallOrderRating=roundUpRating(overallOrderRating);
-				log.debug("Overall order rating is=> "+overallOrderRating);
-
-				log.debug("Key in email_noficiation before update  is => "+key);
-				if(feedbackRatingDaoObj.updateEmailNotification(key, true))
-				{
-					log.debug("Succesfully updated email_notification table");
-					//Updating orders table
-					JsonArray recipeArr=new JsonArray();
-					for(Object token:recipeList)
-					{
-						JsonObject element=new JsonObject();
-						String tokenTempArr[]=token.toString().split(":");
-						element.addProperty(tokenTempArr[0], tokenTempArr[1]);
-						recipeArr.add(element);
-					}
-
-					log.debug("JSON Recipe string is =>"+recipeArr.toString());
-					log.debug("Updating orders table");
-					OrderKey orderKey=new OrderKey(emailObj.getOrderId(),emailObj.getRestId());
-
-					if(feedbackRatingDaoObj.updateOrderData(emailObj.getFeedbackTxt(), 
-							overallOrderRating, overallRecipeRating, recipeArr.toString(), orderKey))
-					{
-						respModel=getSucessResponse("Successfully posted feedback");
-						log.debug("Succesfully updated orders table");
-					}
-					else
-					{
-						respModel=getErrorResponse("Error occured.Please check whether required fields are present");
-						log.debug("Error while updating orders table");
-					}
-				}
-				else
-				{
-					log.debug("Error while updating email_notification table");
-					respModel=getErrorResponse("Error occured.Please check whether required fields are present");
-				}
-
-
+				respModel=updateFeedbackInDb(feedbackObj,key);
 			}
 		}
-		catch(ObjectNotFoundException ex)
+		catch(HibernateObjectRetrievalFailureException ex)
 		{
 			log.error("Error occured.Stacktrace is => "+getStackTrace(ex));
 			FeedbackResponse responseModel=new FeedbackResponse();
@@ -124,12 +74,72 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 		}
 		catch(Exception ex)
 		{
-			log.error("Error occured in postback method.Stacktrace is => "+getStackTrace(ex));
+			log.error("Error occured in postfeedback method.Stacktrace is => "+getStackTrace(ex));
 			respModel=getErrorResponse("Error occured while posting feedback");
 		}
 
 		return respModel;
 
+	}
+
+
+
+	public FeedbackResponse updateFeedbackInDb(FeedbackDomainObject feedbackObj,EmailNotifyKey key)
+	{
+		FeedbackResponse respModel=null;
+		List<Object> recipeList=feedbackObj.getRecipeList();
+		log.debug("Recipe list is =>"+recipeList.toString());
+		float recipeSumRating=extractRating(feedbackObj.getRecipeList());
+		log.debug("Recipe rating sum is =>"+recipeSumRating);
+		float overallRecipeRating=roundUpRating(recipeSumRating/recipeList.size());
+		log.debug("Overall recipe rating is=> "+overallRecipeRating);
+		log.debug("Economy rating is =>"+feedbackObj.getEconomyRate());
+		log.debug("Ambience rating is =>"+feedbackObj.getAmbienceRate());
+		log.debug("Qos rating is =>"+feedbackObj.getQosRate());
+
+		float overallOrderRating=(overallRecipeRating+feedbackObj.getEconomyRate()+
+				feedbackObj.getAmbienceRate()+feedbackObj.getQosRate())/4;
+		overallOrderRating=roundUpRating(overallOrderRating);
+		log.debug("Overall order rating is=> "+overallOrderRating);
+
+		log.debug("Key in email_noficiation before update  is => "+key);
+		if(feedbackRatingDaoObj.updateEmailNotification(key, true))
+		{
+			log.debug("Succesfully updated email_notification table");
+			//Updating orders table
+			JsonArray recipeArr=new JsonArray();
+			for(Object token:recipeList)
+			{
+				JsonObject element=new JsonObject();
+				String tokenTempArr[]=token.toString().split(":");
+				element.addProperty(tokenTempArr[0], tokenTempArr[1]);
+				recipeArr.add(element);
+			}
+
+			log.debug("JSON Recipe string is =>"+recipeArr.toString());
+			log.debug("Updating orders table");
+			OrderKey orderKey=new OrderKey(feedbackObj.getOrderId(),feedbackObj.getRestId());
+
+			if(feedbackRatingDaoObj.updateOrderData(feedbackObj.getFeedbackTxt(), 
+					overallOrderRating, overallRecipeRating, recipeArr.toString(), orderKey))
+			{
+				respModel=getSucessResponse("Successfully posted feedback");
+				log.debug("Succesfully updated orders table");
+			}
+			else
+			{
+				respModel=getErrorResponse("Error occured.Please check whether required fields are present");
+				log.debug("Error while updating orders table");
+			}
+		}
+		else
+		{
+			log.debug("Error while updating email_notification table");
+			respModel=getErrorResponse("Error occured.Please check whether required fields are present");
+		}
+
+		return respModel;
+	
 	}
 
 	/**
