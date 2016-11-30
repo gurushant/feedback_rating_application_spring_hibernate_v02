@@ -1,0 +1,12 @@
+-Positive Scenarios
+1.Retrieve order details by passing order id and restaruent id as a query parameter in URL.
+2.User should be able to post feedback of order which he got served.
+3.User should be able to give rating below 5 only.He should be able to give different rating for each recipes in order.
+4.System should round up fractional rating to fractional decimal round up. i.e 2.1 to 2,2.3 to 2.5,2.8 to 3..so on
+5.User should also be able to post the feedback text.
+
+
+-Negative Scenarios
+1.System should show some message if matching order record does not exist in system.
+2.System should not allow to post feedack and rating if feedback and rating already exists for that order.
+3.System should show error message if rest id or order id or both are missing in postfeedback request payload.
