@@ -1,12 +1,12 @@
 /**
  * 
  */
-package com.feedbackRating.feedback_service.api;
+package com.feedbackRating.service.api;
 
-import com.feedbackRating.models.FeedbackResponse;
-import com.feedbackRating.models.api.OrderResponseApi;
-import com.feedbackRating.models.keys.EmailNotifyKey;
-import com.feedbackRating.models.keys.OrderKey;
+import com.feedbackRating.domain.FeedbackResponse;
+import com.feedbackRating.persistence.models.api.OrderResponseApi;
+import com.feedbackRating.persistence.models.keys.EmailNotifyKey;
+import com.feedbackRating.persistence.models.keys.OrderKey;
 
 /**
  * @author gurushant.j

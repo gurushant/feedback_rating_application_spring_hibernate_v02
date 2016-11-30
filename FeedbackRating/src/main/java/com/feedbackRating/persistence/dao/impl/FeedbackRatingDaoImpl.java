@@ -13,11 +13,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.feedbackRating.models.EmailNotification;
-import com.feedbackRating.models.Order;
-import com.feedbackRating.models.keys.EmailNotifyKey;
-import com.feedbackRating.models.keys.OrderKey;
 import com.feedbackRating.persistence.dao.api.FeedbackRatingDaoAPI;
+import com.feedbackRating.persistence.models.EmailNotification;
+import com.feedbackRating.persistence.models.Order;
+import com.feedbackRating.persistence.models.keys.EmailNotifyKey;
+import com.feedbackRating.persistence.models.keys.OrderKey;
 import com.feedbackRating.utils.CommonUtils;
 
 /**

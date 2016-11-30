@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.feedbackRating.models;
+package com.feedbackRating.persistence.models;
 
 import java.util.Date;
 
@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.feedbackRating.models.keys.EmailNotifyKey;
+import com.feedbackRating.persistence.models.keys.EmailNotifyKey;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.feedback_rating.feedback_service.impl;
+package com.feedbackRating.service.impl;
 ///**
 // * 
 // */

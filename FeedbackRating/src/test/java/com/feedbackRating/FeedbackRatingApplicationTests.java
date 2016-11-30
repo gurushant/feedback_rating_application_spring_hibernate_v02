@@ -1,4 +1,4 @@
-package com.feedback_rating;
+package com.feedbackRating;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

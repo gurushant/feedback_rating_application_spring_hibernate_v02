@@ -1,4 +1,4 @@
-package com.feedbackRating.models.api;
+package com.feedbackRating.persistence.models.api;
 
 /**
  * Empty interface required to differentiate responses of get order detail api.

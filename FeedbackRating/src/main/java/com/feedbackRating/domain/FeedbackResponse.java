@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.feedbackRating.models;
+package com.feedbackRating.domain;
 
 /**
  * @author gurushant.j

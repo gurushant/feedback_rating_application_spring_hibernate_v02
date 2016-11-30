@@ -5,10 +5,10 @@ package com.feedbackRating.persistence.dao.api;
 
 import org.hibernate.Session;
 
-import com.feedbackRating.models.EmailNotification;
-import com.feedbackRating.models.Order;
-import com.feedbackRating.models.keys.EmailNotifyKey;
-import com.feedbackRating.models.keys.OrderKey;
+import com.feedbackRating.persistence.models.EmailNotification;
+import com.feedbackRating.persistence.models.Order;
+import com.feedbackRating.persistence.models.keys.EmailNotifyKey;
+import com.feedbackRating.persistence.models.keys.OrderKey;
 
 /**
  * @author gurushant.j

@@ -1,4 +1,4 @@
-package com.feedback_rating.feedback_service.impl;
+package com.feedbackRating.service.impl;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.feedbackRating.feedback_service.impl.FeedbackServiceImpl;
+import com.feedbackRating.feedbackService.impl.FeedbackServiceImpl;
 import com.feedbackRating.persistence.dao.api.FeedbackRatingDaoAPI;
 
 @RunWith(MockitoJUnitRunner.class)

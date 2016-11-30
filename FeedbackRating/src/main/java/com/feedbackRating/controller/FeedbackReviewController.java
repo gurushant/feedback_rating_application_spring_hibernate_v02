@@ -3,8 +3,7 @@
  */
 package com.feedbackRating.controller;
 
-import javax.transaction.Transactional;
-import javax.ws.rs.QueryParam;
+import javax.websocket.server.PathParam;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.feedbackRating.feedback_service.api.FeedbackServiceApi;
-import com.feedbackRating.models.FeedbackResponse;
-import com.feedbackRating.models.api.OrderResponseApi;
+import com.feedbackRating.domain.FeedbackResponse;
+import com.feedbackRating.persistence.models.api.OrderResponseApi;
+import com.feedbackRating.service.api.FeedbackServiceApi;
 
 
 @RestController
@@ -40,7 +39,7 @@ public class FeedbackReviewController {
 			produces="application/json",
 			method=RequestMethod.GET)
 	@ResponseBody
-	public OrderResponseApi getOrderDetail(@QueryParam("orderId") int orderId,@QueryParam("restId") int restId)
+	public OrderResponseApi getOrderDetail(@PathParam("orderId") int orderId,@PathParam("restId") int restId)
 	{
 		OrderResponseApi response=null;
 		log.info("Hitting get order detail api.Order id is "+orderId+",Rest Id is "+restId);

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.feedbackRating.models;
+package com.feedbackRating.persistence.models;
 
 import java.util.Date;
 
@@ -12,8 +12,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.feedbackRating.models.api.OrderResponseApi;
-import com.feedbackRating.models.keys.OrderKey;
+import com.feedbackRating.persistence.models.api.OrderResponseApi;
+import com.feedbackRating.persistence.models.keys.OrderKey;
 
 /**
  * This is the order entity mapped to the orders table.

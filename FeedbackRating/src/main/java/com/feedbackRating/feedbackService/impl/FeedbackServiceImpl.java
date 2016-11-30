@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.feedbackRating.feedback_service.impl;
+package com.feedbackRating.feedbackService.impl;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -17,14 +17,14 @@ import org.springframework.orm.hibernate4.HibernateObjectRetrievalFailureExcepti
 import org.springframework.stereotype.Service;
 
 import com.feedbackRating.domain.FeedbackDomainObject;
-import com.feedbackRating.feedback_service.api.FeedbackServiceApi;
-import com.feedbackRating.models.FeedbackResponse;
-import com.feedbackRating.models.Order;
-import com.feedbackRating.models.OrderStatus;
-import com.feedbackRating.models.api.OrderResponseApi;
-import com.feedbackRating.models.keys.EmailNotifyKey;
-import com.feedbackRating.models.keys.OrderKey;
+import com.feedbackRating.domain.FeedbackResponse;
+import com.feedbackRating.domain.OrderStatus;
 import com.feedbackRating.persistence.dao.api.FeedbackRatingDaoAPI;
+import com.feedbackRating.persistence.models.Order;
+import com.feedbackRating.persistence.models.api.OrderResponseApi;
+import com.feedbackRating.persistence.models.keys.EmailNotifyKey;
+import com.feedbackRating.persistence.models.keys.OrderKey;
+import com.feedbackRating.service.api.FeedbackServiceApi;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;

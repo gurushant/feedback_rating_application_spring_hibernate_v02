@@ -1,6 +1,6 @@
-package com.feedbackRating.models;
+package com.feedbackRating.domain;
 
-import com.feedbackRating.models.api.OrderResponseApi;
+import com.feedbackRating.persistence.models.api.OrderResponseApi;
 
 /**
  * Order response in case of error,row now found,feedback already exists cases.

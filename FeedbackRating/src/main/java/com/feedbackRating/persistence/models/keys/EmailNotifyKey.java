@@ -1,23 +1,24 @@
 /**
  * 
  */
-package com.feedbackRating.models.keys;
+package com.feedbackRating.persistence.models.keys;
 
 import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
 /**
- * Custom composite key for Order entity
+ * Custom composite key for EmailNotification entity
  * @author gurushant.j
  *
  */
 @Embeddable
-public class OrderKey implements Serializable{
+public class EmailNotifyKey implements Serializable{
     private static final long serialVersionUID = 1L;
 
-	@Column(name="id")
+	@Column(name="order_id")
 	private Integer id;
 	
 	@Column(name="restaruent_id")
@@ -35,10 +36,10 @@ public class OrderKey implements Serializable{
 	public void setRestId(Integer restId) {
 		this.restId = restId;
 	}
-	public OrderKey(){
+	public EmailNotifyKey(){
 		
 	}
-	public OrderKey(Integer id,Integer restId)
+	public EmailNotifyKey(Integer id,Integer restId)
 	{
 		this.id=id;
 		this.restId=restId;
@@ -47,7 +48,7 @@ public class OrderKey implements Serializable{
 	@Override
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
-		OrderKey orderKey=(OrderKey)obj;
+		EmailNotifyKey orderKey=(EmailNotifyKey)obj;
 		if(getId()==orderKey.getId() && getRestId()==orderKey.getRestId())
 		{
 			return true;
