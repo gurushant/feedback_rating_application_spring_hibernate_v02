@@ -1,5 +1,5 @@
 var testModule=angular.module('testApp',[]);
-var serverIpAddress="localhost";
+var serverIpAddress="54.149.195.217";
 
 
 
@@ -22,7 +22,7 @@ testModule.controller('testCtrl',function($scope,$http,$window,$attrs)
 
 
   				//demo-0.0.1-SNAPSHOT
-	$http.get("http://"+serverIpAddress+":8080/feedbackReview/getOrderDetail?orderId="+orderId+"&restId="+restaruentId,config).success(function(response)
+	$http.get("http://"+serverIpAddress+":8080/demo-0.0.1-SNAPSHOT/feedbackReview/getOrderDetail/"+orderId+"/"+restaruentId,config).success(function(response)
 					{
 						
 						if(response.status=='ERROR')
@@ -155,7 +155,7 @@ testModule.controller('testCtrl',function($scope,$http,$window,$attrs)
 
 		//Calling rest api to save rating and feedback.
 		//demo-0.0.1-SNAPSHOT
-		$http.post("http://"+serverIpAddress+":8080/feedbackReview/postFeedback",ratingMap,config).success(function(response)
+		$http.post("http://"+serverIpAddress+":8080/demo-0.0.1-SNAPSHOT/feedbackReview/postFeedback",ratingMap,config).success(function(response)
 					{
 						console.log('Response is '+response);
 						console.log("response=>"+response.message);
