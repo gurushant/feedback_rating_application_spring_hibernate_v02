@@ -88,7 +88,6 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 		emailObj.setFeedbackReceivedTime(new Date());
 		emailObj.setFeedbackExists(isFeedbackReceived);
 		session.saveOrUpdate(emailObj);
-		int i=1/0;
 		isSuccess=true;
 		return isSuccess;
 	}

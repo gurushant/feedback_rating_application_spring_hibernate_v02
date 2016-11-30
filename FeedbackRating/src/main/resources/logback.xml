@@ -16,7 +16,7 @@
     </encoder>
   </appender>
   
-  <logger name="com.feedback_rating" level="DEBUG" >
+  <logger name="com.feedbackRating" level="DEBUG" >
   	    <appender-ref ref="FILE" />
   </logger>
   
