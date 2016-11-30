@@ -41,7 +41,7 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 
 
 	@Autowired
-	FeedbackRatingDaoAPI feedbackRatingDaoObj;
+	private FeedbackRatingDaoAPI feedbackRatingDaoObj;
 
 	/**
 	 * This method is used to update the order's status into the email_notificats table.

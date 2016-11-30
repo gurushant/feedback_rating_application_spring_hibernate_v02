@@ -30,7 +30,7 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 	private static final Logger log = LoggerFactory.getLogger(FeedbackRatingDaoImpl.class);
 
 	@Autowired
-	CommonUtils utils;
+	private CommonUtils utils;
 	@Autowired
 	private SessionFactory _sessionFactory;
 
