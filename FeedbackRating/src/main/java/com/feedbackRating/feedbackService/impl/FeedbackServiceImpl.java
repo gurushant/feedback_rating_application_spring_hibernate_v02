@@ -10,7 +10,6 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.validator.constraints.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ import com.feedbackRating.domain.OrderStatus;
 import com.feedbackRating.persistence.dao.api.FeedbackRatingDaoAPI;
 import com.feedbackRating.persistence.models.Order;
 import com.feedbackRating.persistence.models.api.OrderResponseApi;
-import com.feedbackRating.persistence.models.keys.OrderKey;
 import com.feedbackRating.service.api.FeedbackServiceApi;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -56,7 +54,6 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 
 			Gson gson=new GsonBuilder().create();
 			FeedbackDomainObject feedbackObj=gson.fromJson(postPayload, FeedbackDomainObject.class);
-			OrderKey orderKey=new OrderKey(feedbackObj.getOrderId(),feedbackObj.getRestId());
 			int orderId=feedbackObj.getOrderId();
 			int restId=feedbackObj.getRestId();
 			if(isFeedbackExists(orderId,restId))

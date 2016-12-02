@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyFloat;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.stub;
 
 import org.junit.Test;
@@ -73,7 +74,7 @@ public class FeedbackServiceImplTest {
 		"\"butter naan: 2.5\","+
 		"\"milk shake: 2.5\"]}";
 
-		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(any())).toReturn(true);
+		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(anyInt(),anyInt())).toReturn(true);
 
 		System.out.println(postPayload);
 		FeedbackResponse responseObj=feedbackServiceObj.postFeedback(postPayload);
@@ -99,7 +100,7 @@ public class FeedbackServiceImplTest {
 		"\"butter naan: 2.5\","+
 		"\"milk shake: 2.5\"]}";
 
-		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(any())).toReturn(false);
+		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(anyInt(),anyInt())).toReturn(false);
 		stub(feedbackRatingDaoObj.updateOrderData(any(),anyFloat(),anyFloat(),any(),any())).toReturn(true);
 		stub(feedbackRatingDaoObj.updateEmailNotification(any(), anyBoolean())).toReturn(true);
 		System.out.println(postPayload);
@@ -125,7 +126,7 @@ public class FeedbackServiceImplTest {
 		"\"butter naan: 2.5\","+
 		"\"milk shake: 2.5\"]}";
 
-		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(any())).toReturn(false);
+		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(anyInt(),anyInt())).toReturn(false);
 		stub(feedbackRatingDaoObj.updateOrderData(any(),anyFloat(),anyFloat(),any(),any())).toReturn(false);
 		stub(feedbackRatingDaoObj.updateEmailNotification(any(), anyBoolean())).toReturn(true);
 		System.out.println(postPayload);
@@ -151,7 +152,7 @@ public class FeedbackServiceImplTest {
 		"\"butter naan: 2.5\","+
 		"\"milk shake: 2.5\"]}";
 
-		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(any())).toReturn(false);
+		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(anyInt(),anyInt())).toReturn(false);
 		stub(feedbackRatingDaoObj.updateOrderData(any(),anyFloat(),anyFloat(),any(),any())).toReturn(true);
 		stub(feedbackRatingDaoObj.updateEmailNotification(any(), anyBoolean())).toReturn(false);
 		System.out.println(postPayload);
