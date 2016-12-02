@@ -8,6 +8,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -29,8 +31,16 @@ public class Order implements OrderResponseApi{
 	private String status;
 	@Transient
 	private String message;
-	@EmbeddedId
-	private OrderKey key;
+	@Id
+	@Column(name="id")
+	@GeneratedValue
+	private int id;
+	
+	@Column(name="order_id")
+	private int orderId;
+	@Column(name="restaruent_id")
+	private int restId;
+
 	@Column(name="served_date_time")
 	private Date servedDateTime;
 	@Column(name="order_amount")	
@@ -58,10 +68,7 @@ public class Order implements OrderResponseApi{
 	{
 		
 	}
-	public Order(OrderKey key)
-	{
-		this.key=key;
-	}
+	
 	public String getStatus() {
 		return status;
 	}
@@ -74,12 +81,7 @@ public class Order implements OrderResponseApi{
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public OrderKey getKey() {
-		return key;
-	}
-	public void setKey(OrderKey key) {
-		this.key = key;
-	}
+	
 	public Date getServedDateTime() {
 		return servedDateTime;
 	}
@@ -139,6 +141,30 @@ public class Order implements OrderResponseApi{
 	}
 	public void setFeedback(String feedback) {
 		this.feedback = feedback;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
+	}
+
+	public int getRestId() {
+		return restId;
+	}
+
+	public void setRestId(int restId) {
+		this.restId = restId;
 	}
 	
 	

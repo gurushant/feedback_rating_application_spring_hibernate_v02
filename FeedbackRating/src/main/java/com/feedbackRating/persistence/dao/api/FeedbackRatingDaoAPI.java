@@ -7,7 +7,6 @@ import org.hibernate.Session;
 
 import com.feedbackRating.persistence.models.EmailNotification;
 import com.feedbackRating.persistence.models.Order;
-import com.feedbackRating.persistence.models.keys.EmailNotifyKey;
 import com.feedbackRating.persistence.models.keys.OrderKey;
 
 /**
@@ -15,12 +14,12 @@ import com.feedbackRating.persistence.models.keys.OrderKey;
  *
  */
 public interface FeedbackRatingDaoAPI {
-	public boolean checkIsFeedbackReceived(EmailNotifyKey key);
-	public EmailNotification getEmailDetail(EmailNotifyKey key);
-	public boolean updateEmailNotification(EmailNotifyKey key,boolean isFeedbackReceived);
-	public Order getOrderDetail(OrderKey key);
+	public boolean checkIsFeedbackReceived(OrderKey key);
+	public boolean updateEmailNotification(int orderLineId ,boolean isFeedbackReceived);
+	public Order getOrderDetail(int key);
 	public boolean updateOrderData(String feedback,float overallOrderRating,float overallRecipeRating,
-			String jsonRatingData,OrderKey key);
+			String jsonRatingData,int orderLineId);
 	public Session getSession();
+	public int getOrderLineId(OrderKey key);
 
 }

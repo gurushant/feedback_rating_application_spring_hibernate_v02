@@ -3,17 +3,22 @@
  */
 package com.feedbackRating.persistence.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.feedbackRating.persistence.models.keys.EmailNotifyKey;
 
 
 /**
@@ -23,9 +28,22 @@ import com.feedbackRating.persistence.models.keys.EmailNotifyKey;
 @Entity
 @Table(name="email_notification")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class EmailNotification {
-	@EmbeddedId
-	private EmailNotifyKey key;
+public class EmailNotification implements Serializable{
+	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="id")
+	private int id;
+	
+	@OneToOne
+	@JoinColumn(name="order_line_id")
+	private Order order;
 	
 	@Type(type= "org.hibernate.type.NumericBooleanType")
 	@Column(name="is_email_sent")
@@ -40,12 +58,7 @@ public class EmailNotification {
 	@Type(type= "org.hibernate.type.NumericBooleanType")
 	@Column(name="is_feedback_rating_received")
 	private Boolean isFeedbackExists;
-	public EmailNotifyKey getKey() {
-		return key;
-	}
-	public void setKey(EmailNotifyKey key) {
-		this.key = key;
-	}
+	
 	public boolean isEmailSent() {
 		return isEmailSent;
 	}
@@ -75,6 +88,18 @@ public class EmailNotification {
 	}
 	public void setFeedbackExists(boolean isFeedbackExists) {
 		this.isFeedbackExists = isFeedbackExists;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public Order getOrder() {
+		return order;
+	}
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 	
 }

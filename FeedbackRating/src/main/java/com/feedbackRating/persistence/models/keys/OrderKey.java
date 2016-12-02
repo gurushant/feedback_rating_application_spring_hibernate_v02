@@ -13,10 +13,9 @@ import javax.persistence.Embeddable;
  * @author gurushant.j
  *
  */
-@Embeddable
-public class OrderKey implements Serializable{
-    private static final long serialVersionUID = 1L;
 
+public class OrderKey {
+  
 	@Column(name="id")
 	private Integer id;
 	

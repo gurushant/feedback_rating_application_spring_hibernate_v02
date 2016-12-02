@@ -10,6 +10,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.hibernate.ObjectNotFoundException;
+import org.hibernate.validator.constraints.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,6 @@ import com.feedbackRating.domain.OrderStatus;
 import com.feedbackRating.persistence.dao.api.FeedbackRatingDaoAPI;
 import com.feedbackRating.persistence.models.Order;
 import com.feedbackRating.persistence.models.api.OrderResponseApi;
-import com.feedbackRating.persistence.models.keys.EmailNotifyKey;
 import com.feedbackRating.persistence.models.keys.OrderKey;
 import com.feedbackRating.service.api.FeedbackServiceApi;
 import com.google.gson.Gson;
@@ -49,21 +49,24 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 	public FeedbackResponse postFeedback(String postPayload)
 	{
 		FeedbackResponse respModel=new FeedbackResponse();
+		int orderLineId=0;
 		try
 		{
 			log.debug("Received payload is => "+postPayload);
 
 			Gson gson=new GsonBuilder().create();
 			FeedbackDomainObject feedbackObj=gson.fromJson(postPayload, FeedbackDomainObject.class);
-			EmailNotifyKey key=new EmailNotifyKey(feedbackObj.getOrderId(),feedbackObj.getRestId());
-			if(isFeedbackExists(key))
+			OrderKey orderKey=new OrderKey(feedbackObj.getOrderId(),feedbackObj.getRestId());
+			
+			if(isFeedbackExists(orderKey))
 			{
 				respModel=getSucessResponse("Feedback already exists for this order");
 
 			}
 			else
 			{
-				respModel=updateFeedbackInDb(feedbackObj,key);
+				orderLineId=feedbackRatingDaoObj.getOrderLineId(orderKey);
+				respModel=updateFeedbackInDb(feedbackObj,orderLineId);
 			}
 		}
 		catch(HibernateObjectRetrievalFailureException ex)
@@ -86,8 +89,9 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 	}
 
 
-
-	public FeedbackResponse updateFeedbackInDb(FeedbackDomainObject feedbackObj,EmailNotifyKey key)
+	
+	
+	public FeedbackResponse updateFeedbackInDb(FeedbackDomainObject feedbackObj,int orderLineId)
 	{
 		FeedbackResponse respModel=null;
 		List<Object> recipeList=feedbackObj.getRecipeList();
@@ -105,50 +109,112 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 		overallOrderRating=roundUpRating(overallOrderRating);
 		log.debug("Overall order rating is=> "+overallOrderRating);
 
-		log.debug("Key in email_noficiation before update  is => "+key);
-		if(feedbackRatingDaoObj.updateEmailNotification(key, true))
+		log.debug("Key in email_noficiation before update  is => "+orderLineId);
+		
+		//Updating orders table
+		JsonArray recipeArr=new JsonArray();
+		for(Object token:recipeList)
 		{
-			log.debug("Succesfully updated email_notification table");
-			//Updating orders table
-			JsonArray recipeArr=new JsonArray();
-			for(Object token:recipeList)
-			{
-				JsonObject element=new JsonObject();
-				String tokenTempArr[]=token.toString().split(":");
-				element.addProperty(tokenTempArr[0], tokenTempArr[1]);
-				recipeArr.add(element);
-			}
+			JsonObject element=new JsonObject();
+			String tokenTempArr[]=token.toString().split(":");
+			element.addProperty(tokenTempArr[0], tokenTempArr[1]);
+			recipeArr.add(element);
+		}
 
-			log.debug("JSON Recipe string is =>"+recipeArr.toString());
-			log.debug("Updating orders table");
-			OrderKey orderKey=new OrderKey(feedbackObj.getOrderId(),feedbackObj.getRestId());
-
-			if(feedbackRatingDaoObj.updateOrderData(feedbackObj.getFeedbackTxt(), 
-					overallOrderRating, overallRecipeRating, recipeArr.toString(), orderKey))
+		log.debug("JSON Recipe string is =>"+recipeArr.toString());
+		log.debug("Updating orders table");
+		
+		if(feedbackRatingDaoObj.updateOrderData(feedbackObj.getFeedbackTxt(), 
+				overallOrderRating, overallRecipeRating, recipeArr.toString(),orderLineId))
+		{
+			respModel=getSucessResponse("Successfully posted feedback");
+			log.debug("Succesfully updated orders table");
+			if(feedbackRatingDaoObj.updateEmailNotification(orderLineId, true))
 			{
-				respModel=getSucessResponse("Successfully posted feedback");
-				log.debug("Succesfully updated orders table");
+				log.debug("Succesfully updated email_notification table");
+
 			}
 			else
 			{
+				log.debug("Error while updating email_notification table");
 				respModel=getErrorResponse("Error occured.Please check whether required fields are present");
-				log.debug("Error while updating orders table");
+
 			}
 		}
 		else
 		{
-			log.debug("Error while updating email_notification table");
 			respModel=getErrorResponse("Error occured.Please check whether required fields are present");
-		}
+			log.debug("Error while updating orders table");
 
+		}
+	
 		return respModel;
 	
 	}
 
+
+//	public FeedbackResponse updateFeedbackInDb(FeedbackDomainObject feedbackObj,EmailNotifyKey key)
+//	{
+//		FeedbackResponse respModel=null;
+//		List<Object> recipeList=feedbackObj.getRecipeList();
+//		log.debug("Recipe list is =>"+recipeList.toString());
+//		float recipeSumRating=extractRating(feedbackObj.getRecipeList());
+//		log.debug("Recipe rating sum is =>"+recipeSumRating);
+//		float overallRecipeRating=roundUpRating(recipeSumRating/recipeList.size());
+//		log.debug("Overall recipe rating is=> "+overallRecipeRating);
+//		log.debug("Economy rating is =>"+feedbackObj.getEconomyRate());
+//		log.debug("Ambience rating is =>"+feedbackObj.getAmbienceRate());
+//		log.debug("Qos rating is =>"+feedbackObj.getQosRate());
+//
+//		float overallOrderRating=(overallRecipeRating+feedbackObj.getEconomyRate()+
+//				feedbackObj.getAmbienceRate()+feedbackObj.getQosRate())/4;
+//		overallOrderRating=roundUpRating(overallOrderRating);
+//		log.debug("Overall order rating is=> "+overallOrderRating);
+//
+//		log.debug("Key in email_noficiation before update  is => "+key);
+//		if(feedbackRatingDaoObj.updateEmailNotification(key, true))
+//		{
+//			log.debug("Succesfully updated email_notification table");
+//			//Updating orders table
+//			JsonArray recipeArr=new JsonArray();
+//			for(Object token:recipeList)
+//			{
+//				JsonObject element=new JsonObject();
+//				String tokenTempArr[]=token.toString().split(":");
+//				element.addProperty(tokenTempArr[0], tokenTempArr[1]);
+//				recipeArr.add(element);
+//			}
+//
+//			log.debug("JSON Recipe string is =>"+recipeArr.toString());
+//			log.debug("Updating orders table");
+//			OrderKey orderKey=new OrderKey(feedbackObj.getOrderId(),feedbackObj.getRestId());
+//
+//			if(feedbackRatingDaoObj.updateOrderData(feedbackObj.getFeedbackTxt(), 
+//					overallOrderRating, overallRecipeRating, recipeArr.toString(), orderKey))
+//			{
+//				respModel=getSucessResponse("Successfully posted feedback");
+//				log.debug("Succesfully updated orders table");
+//			}
+//			else
+//			{
+//				respModel=getErrorResponse("Error occured.Please check whether required fields are present");
+//				log.debug("Error while updating orders table");
+//			}
+//		}
+//		else
+//		{
+//			log.debug("Error while updating email_notification table");
+//			respModel=getErrorResponse("Error occured.Please check whether required fields are present");
+//		}
+//
+//		return respModel;
+//	
+//	}
+
 	/**
 	 * This method checks whether feedback exists into the database.
 	 */
-	public boolean isFeedbackExists(EmailNotifyKey key)
+	public boolean isFeedbackExists(OrderKey key)
 	{
 		return feedbackRatingDaoObj.checkIsFeedbackReceived(key);
 	}
@@ -162,14 +228,15 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 		OrderResponseApi response=null;
 		try
 		{
-			EmailNotifyKey emailKey=new EmailNotifyKey(orderId, restId);
-			boolean isFeedbackExist=isFeedbackExists(emailKey);
+			OrderKey orderKey=new OrderKey(orderId, restId);
+			boolean isFeedbackExist=isFeedbackExists(orderKey);
 			log.debug("Feedback for this order=>"+orderId+" is "+isFeedbackExist);
 			if(!isFeedbackExist)
 			{
 				OrderKey key=new OrderKey(orderId,restId);
+				int orderLineId=feedbackRatingDaoObj.getOrderLineId(key);
 				log.debug("Request received to get order details.=>"+key);
-				Order orderObj=feedbackRatingDaoObj.getOrderDetail(key);
+				Order orderObj=feedbackRatingDaoObj.getOrderDetail(orderLineId);
 
 				orderObj.setMessage("Order is successfully retrieved");
 				orderObj.setStatus("SUCCESS");
@@ -204,14 +271,7 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 
 	}
 
-	/**
-	 * This method updates order status about feedback and rating into the db.
-	 */
-	public boolean updateOrderData(String feedback,float overallOrderRating,float overallRecipeRating,
-			String jsonRatingData,OrderKey key)
-	{
-		return feedbackRatingDaoObj.updateOrderData(feedback, overallOrderRating, overallRecipeRating, jsonRatingData, key);
-	}
+	
 
 	/**
 	 * This method is used to extract rating related data from the request of postfeedback api.

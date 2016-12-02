@@ -1,9 +1,11 @@
 package com.feedbackRating.persistence.dao.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Property;
@@ -16,7 +18,6 @@ import org.springframework.stereotype.Repository;
 import com.feedbackRating.persistence.dao.api.FeedbackRatingDaoAPI;
 import com.feedbackRating.persistence.models.EmailNotification;
 import com.feedbackRating.persistence.models.Order;
-import com.feedbackRating.persistence.models.keys.EmailNotifyKey;
 import com.feedbackRating.persistence.models.keys.OrderKey;
 import com.feedbackRating.utils.CommonUtils;
 
@@ -43,48 +44,69 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 	 * Checks whether feedback is already exists in database.
 	 * If exists return true else false
 	 */
-	public boolean checkIsFeedbackReceived(EmailNotifyKey key)
+	public boolean checkIsFeedbackReceived(OrderKey key)
 	{
 		boolean isFeedbackExists=true;
 		Session session=getSession();
-		Date feedbackReceivedTime = (Date)session.createCriteria(EmailNotification.class)
-				.add(Restrictions.eq("isFeedbackExists",true))
-				.add(Restrictions.eq("key",key))
-				.setProjection(Property.forName("feedbackReceivedTime"))
-				.uniqueResult();
-		if(feedbackReceivedTime!=null)
+		Query isFeedbackExistQuery= session.createQuery("select isFeedbackExists from EmailNotification where order_line_id="
+				+ "(select id from Order where orderId=:order_id and  restId=:restaruent_id)");
+		
+		isFeedbackExistQuery.setInteger("order_id", key.getId());
+		isFeedbackExistQuery.setInteger("restaruent_id", key.getRestId());
+		List<Boolean>feedbackList= isFeedbackExistQuery.list();
+		if(feedbackList.get(0).equals(true))
 		{
 			isFeedbackExists=true;
 		}
 		else
+		{
 			isFeedbackExists=false;
+		}
 		return isFeedbackExists;
 	}
-
-	/**
-	 * This method is used to get email details.
-	 */
-	public EmailNotification getEmailDetail(EmailNotifyKey key)
+	
+	
+	public int getOrderLineId(OrderKey key)
 	{
-		try
-		{
-			return (EmailNotification) getSession().load(EmailNotification.class, key);
-		}
-		catch(Exception ex)
-		{
-			log.error("Error occured.Exception stacktrace is =>"+utils.getStackTrace(ex));
-			return null;
-		}
+		Session session=getSession();
+		Query orderQuery= session.createQuery("select id from Order where orderId=:order_id and  restId=:restaruent_id)");
+		
+		orderQuery.setInteger("order_id", key.getId());
+		orderQuery.setInteger("restaruent_id", key.getRestId());
+		List<Integer>orderIdList= orderQuery.list();
+		return orderIdList.get(0);
+
 	}
 
+//	public boolean checkIsFeedbackReceived(EmailNotifyKey key)
+//	{
+//		boolean isFeedbackExists=true;
+//		Session session=getSession();
+//		Date feedbackReceivedTime = (Date)session.createCriteria(EmailNotification.class)
+//				.add(Restrictions.eq("isFeedbackExists",true))
+//				.add(Restrictions.eq("key",key))
+//				.setProjection(Property.forName("feedbackReceivedTime"))
+//				.uniqueResult();
+//		if(feedbackReceivedTime!=null)
+//		{
+//			isFeedbackExists=true;
+//		}
+//		else
+//			isFeedbackExists=false;
+//		return isFeedbackExists;
+//	}
+	
+	
+
+	
 	/**
 	 * This method is used to update the order's feedback and rating status into the db.
 	 */
-	public boolean updateEmailNotification(EmailNotifyKey key,boolean isFeedbackReceived)
+	public boolean updateEmailNotification(int orderLineId ,boolean isFeedbackReceived)
 	{
 		boolean isSuccess=false;
 		Session session=getSession();
-		EmailNotification emailObj=(EmailNotification)session.load(EmailNotification.class, key);
+		EmailNotification emailObj=(EmailNotification)session.load(EmailNotification.class, orderLineId);
 		emailObj.setFeedbackReceivedTime(new Date());
 		emailObj.setFeedbackExists(isFeedbackReceived);
 		session.saveOrUpdate(emailObj);
@@ -95,12 +117,12 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 	/**
 	 * This method is used to fetch order details from the database.
 	 */
-	public Order getOrderDetail(OrderKey key)
+	public Order getOrderDetail(int orderLineId)
 	{
 		Order retOrder=null;
 
 		Session session=getSession();
-		retOrder=(Order) session.load(Order.class, key);
+		retOrder=(Order) session.load(Order.class, orderLineId);
 
 		return retOrder;
 	}
@@ -109,19 +131,17 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 	 * This method is used to update the order's feedback and rating status into the order table .
 	 */
 	public boolean updateOrderData(String feedback,float overallOrderRating,float overallRecipeRating,
-			String jsonRatingData,OrderKey key)
+			String jsonRatingData,int orderLineId)
 	{
 		boolean isSuccess=false;
-
 		Session session=getSession();
-		Order orderObj=(Order)session.load(Order.class, key);
+		Order orderObj=(Order)session.load(Order.class, orderLineId);
 		orderObj.setFeedback(feedback);
 		orderObj.setOrderRating(overallOrderRating);
 		orderObj.setRecipeRating(overallRecipeRating);
 		orderObj.setRatingFeedback(jsonRatingData);
 		session.saveOrUpdate(orderObj);
 		isSuccess=true;
-
 		return isSuccess;
 	}
 
