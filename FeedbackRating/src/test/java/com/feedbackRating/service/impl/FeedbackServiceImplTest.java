@@ -5,6 +5,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyFloat;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.stub;
 
 import org.junit.Test;
@@ -101,8 +102,8 @@ public class FeedbackServiceImplTest {
 		"\"milk shake: 2.5\"]}";
 
 		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(anyInt(),anyInt())).toReturn(false);
-		stub(feedbackRatingDaoObj.updateOrderData(any(),anyFloat(),anyFloat(),any(),any())).toReturn(true);
-		stub(feedbackRatingDaoObj.updateEmailNotification(any(), anyBoolean())).toReturn(true);
+		stub(feedbackRatingDaoObj.updateOrderData(any(),anyFloat(),anyFloat(),anyString(),anyInt())).toReturn(true);
+		stub(feedbackRatingDaoObj.updateEmailNotification(anyInt(), anyBoolean())).toReturn(true);
 		System.out.println(postPayload);
 		FeedbackResponse responseObj=feedbackServiceObj.postFeedback(postPayload);
 		assertEquals("Successfully posted feedback", responseObj.getMessage());
@@ -127,8 +128,8 @@ public class FeedbackServiceImplTest {
 		"\"milk shake: 2.5\"]}";
 
 		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(anyInt(),anyInt())).toReturn(false);
-		stub(feedbackRatingDaoObj.updateOrderData(any(),anyFloat(),anyFloat(),any(),any())).toReturn(false);
-		stub(feedbackRatingDaoObj.updateEmailNotification(any(), anyBoolean())).toReturn(true);
+		stub(feedbackRatingDaoObj.updateOrderData(anyString(),anyFloat(),anyFloat(),anyString(),anyInt())).toReturn(false);
+		stub(feedbackRatingDaoObj.updateEmailNotification(anyInt(),anyBoolean())).toReturn(true);
 		System.out.println(postPayload);
 		FeedbackResponse responseObj=feedbackServiceObj.postFeedback(postPayload);
 		assertEquals("Error occured.Please check whether required fields are present", responseObj.getMessage());
@@ -153,8 +154,8 @@ public class FeedbackServiceImplTest {
 		"\"milk shake: 2.5\"]}";
 
 		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(anyInt(),anyInt())).toReturn(false);
-		stub(feedbackRatingDaoObj.updateOrderData(any(),anyFloat(),anyFloat(),any(),any())).toReturn(true);
-		stub(feedbackRatingDaoObj.updateEmailNotification(any(), anyBoolean())).toReturn(false);
+		stub(feedbackRatingDaoObj.updateOrderData(anyString(),anyFloat(),anyFloat(),anyString(),anyInt())).toReturn(true);
+		stub(feedbackRatingDaoObj.updateEmailNotification(anyInt(), anyBoolean())).toReturn(false);
 		System.out.println(postPayload);
 		FeedbackResponse responseObj=feedbackServiceObj.postFeedback(postPayload);
 		assertEquals("Error occured.Please check whether required fields are present", responseObj.getMessage());
