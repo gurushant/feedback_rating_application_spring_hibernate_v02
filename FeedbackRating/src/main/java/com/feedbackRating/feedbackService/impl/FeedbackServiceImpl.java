@@ -57,15 +57,16 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 			Gson gson=new GsonBuilder().create();
 			FeedbackDomainObject feedbackObj=gson.fromJson(postPayload, FeedbackDomainObject.class);
 			OrderKey orderKey=new OrderKey(feedbackObj.getOrderId(),feedbackObj.getRestId());
-			
-			if(isFeedbackExists(orderKey))
+			int orderId=feedbackObj.getOrderId();
+			int restId=feedbackObj.getRestId();
+			if(isFeedbackExists(orderId,restId))
 			{
 				respModel=getSucessResponse("Feedback already exists for this order");
 
 			}
 			else
 			{
-				orderLineId=feedbackRatingDaoObj.getOrderLineId(orderKey);
+				orderLineId=feedbackRatingDaoObj.getOrderLineId(orderId,restId);
 				respModel=updateFeedbackInDb(feedbackObj,orderLineId);
 			}
 		}
@@ -214,9 +215,9 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 	/**
 	 * This method checks whether feedback exists into the database.
 	 */
-	public boolean isFeedbackExists(OrderKey key)
+	public boolean isFeedbackExists(int orderId,int restId )
 	{
-		return feedbackRatingDaoObj.checkIsFeedbackReceived(key);
+		return feedbackRatingDaoObj.checkIsFeedbackReceived( orderId, restId);
 	}
 
 	/**
@@ -228,14 +229,12 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 		OrderResponseApi response=null;
 		try
 		{
-			OrderKey orderKey=new OrderKey(orderId, restId);
-			boolean isFeedbackExist=isFeedbackExists(orderKey);
+			boolean isFeedbackExist=isFeedbackExists(orderId,restId);
 			log.debug("Feedback for this order=>"+orderId+" is "+isFeedbackExist);
 			if(!isFeedbackExist)
 			{
-				OrderKey key=new OrderKey(orderId,restId);
-				int orderLineId=feedbackRatingDaoObj.getOrderLineId(key);
-				log.debug("Request received to get order details.=>"+key);
+				int orderLineId=feedbackRatingDaoObj.getOrderLineId(orderId,restId);
+				log.debug("Request received to get order details.=>"+orderId+","+restId);
 				Order orderObj=feedbackRatingDaoObj.getOrderDetail(orderLineId);
 
 				orderObj.setMessage("Order is successfully retrieved");

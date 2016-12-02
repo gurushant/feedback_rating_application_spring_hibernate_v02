@@ -44,15 +44,15 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 	 * Checks whether feedback is already exists in database.
 	 * If exists return true else false
 	 */
-	public boolean checkIsFeedbackReceived(OrderKey key)
+	public boolean checkIsFeedbackReceived(int orderId,int restId)
 	{
 		boolean isFeedbackExists=true;
 		Session session=getSession();
 		Query isFeedbackExistQuery= session.createQuery("select isFeedbackExists from EmailNotification where order_line_id="
 				+ "(select id from Order where orderId=:order_id and  restId=:restaruent_id)");
 		
-		isFeedbackExistQuery.setInteger("order_id", key.getId());
-		isFeedbackExistQuery.setInteger("restaruent_id", key.getRestId());
+		isFeedbackExistQuery.setInteger("order_id", orderId);
+		isFeedbackExistQuery.setInteger("restaruent_id", restId);
 		List<Boolean>feedbackList= isFeedbackExistQuery.list();
 		if(feedbackList.get(0).equals(true))
 		{
@@ -66,13 +66,13 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 	}
 	
 	
-	public int getOrderLineId(OrderKey key)
+	public int getOrderLineId(int orderId,int restId)
 	{
 		Session session=getSession();
 		Query orderQuery= session.createQuery("select id from Order where orderId=:order_id and  restId=:restaruent_id)");
 		
-		orderQuery.setInteger("order_id", key.getId());
-		orderQuery.setInteger("restaruent_id", key.getRestId());
+		orderQuery.setInteger("order_id", orderId);
+		orderQuery.setInteger("restaruent_id", restId);
 		List<Integer>orderIdList= orderQuery.list();
 		return orderIdList.get(0);
 

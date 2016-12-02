@@ -13,7 +13,7 @@ import com.feedbackRating.persistence.models.keys.OrderKey;
  */
 public interface FeedbackServiceApi {
 	public FeedbackResponse postFeedback(String postPayload);
-	public boolean isFeedbackExists(OrderKey orderKey);
+	public boolean isFeedbackExists(int orderId,int restId);
 	public OrderResponseApi getOrderDetails(int orderId,int restId);
 
 }
