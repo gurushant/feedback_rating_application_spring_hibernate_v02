@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.feedbackRating.persistence.models.api.OrderResponseApi;
@@ -21,7 +22,7 @@ import com.feedbackRating.persistence.models.api.OrderResponseApi;
  *
  */
 @Entity
-@Table(name="orders")
+@Table(name="orders",uniqueConstraints = { @UniqueConstraint( columnNames = { "order_id", "restaruent_id" })})
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Order implements OrderResponseApi{
 	

@@ -74,10 +74,8 @@ public class FeedbackServiceImplTest {
 		"\"chicken handi: 2.5\","+
 		"\"butter naan: 2.5\","+
 		"\"milk shake: 2.5\"]}";
-
+		stub(feedbackRatingDaoObj.isOrderExists(anyInt(),anyInt())).toReturn(true);
 		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(anyInt(),anyInt())).toReturn(true);
-
-		System.out.println(postPayload);
 		FeedbackResponse responseObj=feedbackServiceObj.postFeedback(postPayload);
 		assertEquals("Feedback already exists for this order", responseObj.getMessage());
 			
@@ -100,7 +98,8 @@ public class FeedbackServiceImplTest {
 		"\"chicken handi: 2.5\","+
 		"\"butter naan: 2.5\","+
 		"\"milk shake: 2.5\"]}";
-
+		
+		stub(feedbackRatingDaoObj.isOrderExists(anyInt(),anyInt())).toReturn(true);
 		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(anyInt(),anyInt())).toReturn(false);
 		stub(feedbackRatingDaoObj.updateOrderData(any(),anyFloat(),anyFloat(),anyString(),anyInt())).toReturn(true);
 		stub(feedbackRatingDaoObj.updateEmailNotification(anyInt(), anyBoolean())).toReturn(true);
@@ -126,7 +125,7 @@ public class FeedbackServiceImplTest {
 		"\"chicken handi: 2.5\","+
 		"\"butter naan: 2.5\","+
 		"\"milk shake: 2.5\"]}";
-
+		stub(feedbackRatingDaoObj.isOrderExists(anyInt(),anyInt())).toReturn(true);
 		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(anyInt(),anyInt())).toReturn(false);
 		stub(feedbackRatingDaoObj.updateOrderData(anyString(),anyFloat(),anyFloat(),anyString(),anyInt())).toReturn(false);
 		stub(feedbackRatingDaoObj.updateEmailNotification(anyInt(),anyBoolean())).toReturn(true);
@@ -135,6 +134,31 @@ public class FeedbackServiceImplTest {
 		assertEquals("Error occured.Please check whether required fields are present", responseObj.getMessage());
 	}
 
+	/**
+	 * Test suppose order does not exist in system.
+	 */
+	@Test
+	public void testPostFeedbackOrderExistance()
+	{
+		String postPayload="{"+
+	"\"order_id\": \"2000\","+
+	"\"restaruent_id\": \"1\","+
+	"\"economy\": \"2\","+
+	"\"ambience\": \"2.5\","+
+	"\"qos\": \"3\","+
+	"\"feedback\": \"test feedback\","+
+	"\"recipe_rating\": ["+
+		"\"chicken handi: 2.5\","+
+		"\"butter naan: 2.5\","+
+		"\"milk shake: 2.5\"]}";
+		stub(feedbackRatingDaoObj.isOrderExists(anyInt(),anyInt())).toReturn(false);
+		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(anyInt(),anyInt())).toReturn(false);
+		stub(feedbackRatingDaoObj.updateOrderData(anyString(),anyFloat(),anyFloat(),anyString(),anyInt())).toReturn(false);
+		stub(feedbackRatingDaoObj.updateEmailNotification(anyInt(),anyBoolean())).toReturn(true);
+		System.out.println(postPayload);
+		FeedbackResponse responseObj=feedbackServiceObj.postFeedback(postPayload);
+		assertEquals("Order does not exist in system.Please check combination of order id and restaruent id", responseObj.getMessage());
+	}
 	/**
 	 * Check feedback error if updateEmailNotification returns false.
 	 */
@@ -152,12 +176,13 @@ public class FeedbackServiceImplTest {
 		"\"chicken handi: 2.5\","+
 		"\"butter naan: 2.5\","+
 		"\"milk shake: 2.5\"]}";
-
+		stub(feedbackRatingDaoObj.isOrderExists(anyInt(),anyInt())).toReturn(true);
 		stub(feedbackRatingDaoObj.checkIsFeedbackReceived(anyInt(),anyInt())).toReturn(false);
 		stub(feedbackRatingDaoObj.updateOrderData(anyString(),anyFloat(),anyFloat(),anyString(),anyInt())).toReturn(true);
 		stub(feedbackRatingDaoObj.updateEmailNotification(anyInt(), anyBoolean())).toReturn(false);
 		System.out.println(postPayload);
 		FeedbackResponse responseObj=feedbackServiceObj.postFeedback(postPayload);
+		System.out.println(">>>>>>>>>>>>>>>>>>"+responseObj.getMessage());
 		assertEquals("Error occured.Please check whether required fields are present", responseObj.getMessage());
 	}
 	

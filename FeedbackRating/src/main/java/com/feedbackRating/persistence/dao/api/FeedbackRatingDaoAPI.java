@@ -13,6 +13,7 @@ import com.feedbackRating.persistence.models.Order;
  *
  */
 public interface FeedbackRatingDaoAPI {
+	public boolean isOrderExists(int orderId,int restId);
 	public boolean checkIsFeedbackReceived(int orderId,int restId);
 	public boolean updateEmailNotification(int orderLineId ,boolean isFeedbackReceived);
 	public Order getOrderDetail(int key);

@@ -34,6 +34,24 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 	}
 
 	/**
+	 * Check if order exists.
+	 */
+	public boolean isOrderExists(int orderId,int restId)
+	{
+		boolean isFeedbackExists=true;
+		Session session=getSession();
+		Query isFeedbackExistQuery= session.createQuery("select id from Order where orderId=:order_id and  restId=:restaruent_id)");
+		isFeedbackExistQuery.setInteger("order_id", orderId);
+		isFeedbackExistQuery.setInteger("restaruent_id", restId);
+		List<Boolean>feedbackList= isFeedbackExistQuery.list();
+		if(feedbackList.size() > 0)
+			isFeedbackExists= true;
+		else
+			isFeedbackExists=false;
+		return isFeedbackExists;
+	}
+	
+	/**
 	 * Checks whether feedback is already exists in database.
 	 * If exists return true else false
 	 */

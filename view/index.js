@@ -1,5 +1,5 @@
 var testModule=angular.module('testApp',[]);
-var serverIpAddress="54.149.195.217";
+var serverIpAddress="localhost";
 
 
 
@@ -22,10 +22,15 @@ testModule.controller('testCtrl',function($scope,$http,$window,$attrs)
 
 
   				//demo-0.0.1-SNAPSHOT
-	$http.get("http://"+serverIpAddress+":8080/demo-0.0.1-SNAPSHOT/feedbackReview/getOrderDetail/"+orderId+"/"+restaruentId,config).success(function(response)
+	$http.get("http://"+serverIpAddress+":8080/feedbackReview/getOrderDetail/"+orderId+"/"+restaruentId,config).success(function(response)
 					{
 						
 						if(response.status=='ERROR')
+						{
+							alert(response.message);
+							return;
+						}
+						if(response.message=='Order does not exist in system.Please check combination of order id and restaruent id')
 						{
 							alert(response.message);
 							return;
@@ -46,7 +51,7 @@ testModule.controller('testCtrl',function($scope,$http,$window,$attrs)
 							return;
 						}
 						console.log('Order id is '+response["id"]);
-						$scope.order_id=response.key.id;
+						$scope.order_id=response.orderId;
 						var recipesJson=response.recipeJson;
 						recipesJson=JSON.parse(recipesJson);
 						console.log('Recipes are =>'+recipesJson.length);
@@ -155,8 +160,13 @@ testModule.controller('testCtrl',function($scope,$http,$window,$attrs)
 
 		//Calling rest api to save rating and feedback.
 		//demo-0.0.1-SNAPSHOT
-		$http.post("http://"+serverIpAddress+":8080/demo-0.0.1-SNAPSHOT/feedbackReview/postFeedback",ratingMap,config).success(function(response)
+		$http.post("http://"+serverIpAddress+":8080/feedbackReview/postFeedback",ratingMap,config).success(function(response)
 					{
+						if(response.message=='Order does not exist in system.Please check combination of order id and restaruent id')
+						{
+							alert(response.message);
+							return;
+						}
 						console.log('Response is '+response);
 						console.log("response=>"+response.message);
 						alert(response.message);
