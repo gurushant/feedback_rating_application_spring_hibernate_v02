@@ -89,23 +89,6 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 
 	}
 
-//	public boolean checkIsFeedbackReceived(EmailNotifyKey key)
-//	{
-//		boolean isFeedbackExists=true;
-//		Session session=getSession();
-//		Date feedbackReceivedTime = (Date)session.createCriteria(EmailNotification.class)
-//				.add(Restrictions.eq("isFeedbackExists",true))
-//				.add(Restrictions.eq("key",key))
-//				.setProjection(Property.forName("feedbackReceivedTime"))
-//				.uniqueResult();
-//		if(feedbackReceivedTime!=null)
-//		{
-//			isFeedbackExists=true;
-//		}
-//		else
-//			isFeedbackExists=false;
-//		return isFeedbackExists;
-//	}
 	
 	
 
@@ -134,8 +117,7 @@ public class FeedbackRatingDaoImpl implements FeedbackRatingDaoAPI {
 
 		Session session=getSession();
 		retOrder=(Order) session.load(Order.class, orderLineId);
-
-		return retOrder;
+		return retOrder;	
 	}
 
 	/**

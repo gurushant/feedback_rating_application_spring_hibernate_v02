@@ -3,6 +3,7 @@
  */
 package com.feedbackRating.persistence.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -23,11 +24,12 @@ import com.feedbackRating.persistence.models.api.OrderResponseApi;
  */
 @Entity
 @Table(name="orders",uniqueConstraints = { @UniqueConstraint( columnNames = { "order_id", "restaruent_id" })})
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler","id"})
 public class Order implements OrderResponseApi{
 	
 	@Transient
 	private String status;
+	
 	@Transient
 	private String message;
 	@Id
@@ -165,6 +167,8 @@ public class Order implements OrderResponseApi{
 	public void setRestId(int restId) {
 		this.restId = restId;
 	}
+
+
 	
 	
 }

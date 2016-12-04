@@ -234,12 +234,13 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 		OrderResponseApi response=null;
 		try
 		{
-			OrderStatus responseModel=new OrderStatus();
+			Order responseModel=new Order();
 			if(!feedbackRatingDaoObj.isOrderExists(orderId, restId))
 			{
-				responseModel.setMessage("Order does not exist in system.Please check combination of order id and restaruent id");
-				responseModel.setStatus("SUCCESS");
-				response=responseModel;
+				OrderStatus orderExists=new OrderStatus();
+				orderExists.setMessage("Order does not exist in system.Please check combination of order id and restaruent id");
+				orderExists.setStatus("SUCCESS");
+				response=orderExists;
 			}
 			else
 			{
@@ -258,9 +259,11 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 				}
 				else
 				{
-					responseModel.setMessage("Feedback already received for this order");
-					responseModel.setStatus("SUCCESS");
-					response=responseModel;
+					OrderStatus orderStatusModel=new OrderStatus();
+					orderStatusModel.setMessage("Feedback already exist for this order");
+					orderStatusModel.setStatus("SUCCESS");
+					response=orderStatusModel;
+
 				}
 			}
 		}

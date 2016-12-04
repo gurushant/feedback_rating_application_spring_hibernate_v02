@@ -36,11 +36,11 @@ public class FeedbackReviewController {
 	 * @param restId
 	 * @return
 	 */
-	@RequestMapping(value="/getOrderDetail/{orderId}/{restId}",
+	@RequestMapping(value="/getOrderDetail/{restId}/{orderId}",
 			produces="application/json",
 			method=RequestMethod.GET)
 	@ResponseBody
-	public OrderResponseApi getOrderDetail(@PathVariable("orderId") int orderId,@PathVariable("restId") int restId)
+	public OrderResponseApi getOrderDetail(@PathVariable("restId") int restId,@PathVariable("orderId") int orderId)
 	{
 		OrderResponseApi response=null;
 		log.info("Hitting get order detail api.Order id is "+orderId+",Rest Id is "+restId);
