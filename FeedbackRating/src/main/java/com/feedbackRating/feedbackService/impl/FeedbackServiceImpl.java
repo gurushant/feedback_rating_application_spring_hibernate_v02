@@ -56,6 +56,7 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 			FeedbackDomainObject feedbackObj=gson.fromJson(postPayload, FeedbackDomainObject.class);
 			int orderId=feedbackObj.getOrderId();
 			int restId=feedbackObj.getRestId();
+			
 			//check whether order exist in system.
 			if(!feedbackRatingDaoObj.isOrderExists(orderId, restId))
 			{
@@ -84,10 +85,15 @@ public class FeedbackServiceImpl implements FeedbackServiceApi {
 			respModel=responseModel;
 
 		}
+		catch(NullPointerException ex)
+		{
+			log.error("Parameters are missing.Stacktrace is => "+getStackTrace(ex));
+			respModel=getErrorResponse("Please check the payload.Seems some parameters are missing");
+		}
 		catch(Exception ex)
 		{
 			log.error("Error occured in postfeedback method.Stacktrace is => "+getStackTrace(ex));
-			respModel=getErrorResponse("Error occured while posting feedback");
+			respModel=getErrorResponse("Error occured.Please try again later");
 		}
 
 		return respModel;
